@@ -25,3 +25,8 @@ Socket.prototype.onAllMessages = function(callback){
     callback(messageReceived);
   });
 };
+
+//Sends message with edit event
+Socket.prototype.sendLobby = function(message){
+  this.connection.emit('new room', message);
+};
