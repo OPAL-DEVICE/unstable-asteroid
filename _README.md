@@ -4,9 +4,9 @@
 
 ## Team
 
-  - __Product Owner__: Mike Hart
-  - __Scrum Master__: Chris Trevino
-  - __Development Team Members__: Beth Johnson, Alex Zai
+  - __Product Owner__: Stephan Genyk
+  - __Scrum Master__: Caroline Wong
+  - __Development Team Members__: Doug Phung, Jimmy Gong
 
 ## Table of Contents
 
