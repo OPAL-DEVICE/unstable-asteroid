@@ -61,11 +61,11 @@ io.on('connection', function(socket) {
   /* room socket stuff */
   //Create room
   socket.on('new room',function(roomObj, userObj){
-    roomController.addNewroom(roomObj, userObj, function(isTaken){
-      console.log('addNewroom');
+    roomController.addNewRoom(roomObj, userObj, function(isTaken){
+      console.log('addNewRoom');
       //emit back to client
       if (isTaken) {
-        console.log('room Name Taken: ' + roomObj.name);
+        console.log('Room Name Taken: ' + roomObj.name);
         socket.emit('room taken', true);
       }
       else {
@@ -82,6 +82,11 @@ io.on('connection', function(socket) {
       else {
         socket.emit('wrong room password', true);
       }
+    });
+  });
+  socket.on('exit room', function(roomObj, userObj){
+    roomController.exitRoom(roomObj, userObj, function(){
+      socket.emit('exited room', roomObj);
     });
   });
 

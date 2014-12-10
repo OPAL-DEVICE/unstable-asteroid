@@ -96,9 +96,9 @@ mongoose.connect('mongodb://MongoLab-d:tsWFfWiQkrxfZhKZbNOBPVGp3culnVTNs5G7nyd1c
   * @params [Object] room object
             [String] user's username to be removed 
   */
-  exitRoom: function(roomObj, userObj){
+  exitRoom: function(roomObj, userObj, callback){
     var userIndex = roomObj.users.indexOf(userObj.name);
-    roomObj.splice(userIndex, 1);
+    roomObj.users.splice(userIndex, 1);
   } //,
   
 
