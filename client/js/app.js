@@ -1,3 +1,4 @@
+
 treeData = [];
 
 var setTreeData = function(data){
@@ -16,6 +17,8 @@ var disallowRemoval = function(data){
 }
 
 $(document).ready(function(){
+
+
 
   $('.btn.remove').hide();
 
@@ -62,4 +65,3 @@ $(document).ready(function(){
   });
 
 });
-

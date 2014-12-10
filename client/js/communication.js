@@ -25,3 +25,29 @@ Socket.prototype.onAllMessages = function(callback){
     callback(messageReceived);
   });
 };
+
+//Sends/creates a roomname to server.
+Socket.prototype.createRoom = function(roomName){
+	this.connection.emit('new room', roomName); 
+}
+
+//sends user information to server. 
+Socket.prototype.userSignIn = function(username, password){
+	console.log("INSIDE USERSIGNIN")
+	this.connection.emit('user sign in', {name: username, password: password}); 
+}
+
+Socket.prototype.onLobbyTaken = function(callback) {
+	this.connection.on('lobby taken'), function(trucey) {
+		callback(trucey);
+	}
+}
+
+// lobby taken
+// created lobby
+// entered lobby
+// wrong lobby password
+// user taken
+// created user
+// logged in
+// wrong user password
