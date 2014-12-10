@@ -4,7 +4,7 @@ var mongoose = require('mongoose');
 
 //creates schema for messages with properties message, parentID, and childrenID
 //unqiue _id created by default
-var LobbySchema = new mongoose.Schema({
+var RoomSchema = new mongoose.Schema({
   name: String,
   users: [String],
   messages: { type : Array , "default" : [] },
@@ -12,4 +12,4 @@ var LobbySchema = new mongoose.Schema({
   createdBy: String
 });
 
-module.exports = mongoose.model('Lobby', LobbySchema);
+module.exports = mongoose.model('Room', RoomSchema);
