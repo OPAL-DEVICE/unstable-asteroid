@@ -19,10 +19,10 @@ mongoose.connect('mongodb://MongoLab-d:tsWFfWiQkrxfZhKZbNOBPVGp3culnVTNs5G7nyd1c
   addNewLobby: function(lobbyObject, userObject, callback) { 
    var newLobby = {
       name: lobbyObject.name,
-      usersId: [userObject.userId],
+      users: [userObject.name],
       messages: [],
       password: '',
-      createdBy: [mongoose.Schema.Types.ObjectId]
+      createdBy: userObject.name
    };
     
     //creates promises of query functions
@@ -53,12 +53,23 @@ mongoose.connect('mongodb://MongoLab-d:tsWFfWiQkrxfZhKZbNOBPVGp3culnVTNs5G7nyd1c
   * enter lobby when given lobby name
   * @params [Function] callback to be called after successful retrieval
   */
-  enterLobby: function(lobbyName, lobbyPassword, callback) {
+  /**
+  * lobby authentication
+  * @params [Function] callback to be called after successful retrieval
+  */
+  /**
+  * create and store lobby object. if password is null, public lobby
+  * @params [Function] callback to be called after successful retrieval
+  */
+  //PUBLIC: User not prompted for password, so this will be expecting an empty string
+  //PRIVATE: User prompted for password
+  enterLobby: function(lobbyName, lobbyPassword, userObj, callback) {
     var findLobby = Q.nbind(Lobby.find, Lobby);
     findLobby({name: lobbyName})
       .then(function(foundLobby){
         if(foundLobby.length !== 0) {
           if(foundLobby[0].password === lobbyPassword){
+            foundLobby[0].users.push(userObj.username)
             callback(true);
           }
           //wrong password
@@ -73,24 +84,22 @@ mongoose.connect('mongodb://MongoLab-d:tsWFfWiQkrxfZhKZbNOBPVGp3culnVTNs5G7nyd1c
       .fail(function() {
         console.error('Inappropriate input');
       });
-  } //,
-
-  /**
-  * lobby authentication
-  * @params [Function] callback to be called after successful retrieval
-  */
-
-  /**
-  * create and store lobby object. if password is null, public lobby
-  * @params [Function] callback to be called after successful retrieval
-  */
+  },
 
   /**
   * adds people to lobby when join
   * @params [Function] callback to be called after successful retrieval
   */
 
-
+  /**
+  * Removes user from lobby
+  * @params [Object] lobby object
+            [String] user's username to be removed 
+  */
+  exitLobby: function(lobbyObj, userObj){
+    var userIndex = lobbyObj.users.indexOf(userObj.name);
+    lobbyObj.splice(userIndex, 1);
+  } //,
   
 
  };

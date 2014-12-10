@@ -63,20 +63,20 @@ io.on('connection', function(socket) {
       //emit back to client
       if (isTaken) {
         console.log('Lobby Name Taken: ' + lobbyObj.name);
-        socket.emit('lobby taken');
+        socket.emit('lobby taken', true);
       }
       else {
         socket.emit('created lobby', lobbyObj);
       }
     });
   });
-  socket.on('enter lobby', function(lobbyName, lobbyPass){
-    lobbyController.enterLobby(lobbyName, lobbyPass, function(isAuthentic){
+  socket.on('enter lobby', function(lobbyName, lobbyPass, userObj){
+    lobbyController.enterLobby(lobbyName, lobbyPass, userObj, function(isAuthentic){
       if(isAuthentic) {
         socket.emit('entered lobby', lobbyObj);
       }
       else {
-        socket.emit('wrong lobby password');
+        socket.emit('wrong lobby password', true);
       }
     });
   });
@@ -89,7 +89,7 @@ io.on('connection', function(socket) {
       //emit back to client
       if (isTaken) {
         console.log('Username taken: ' + userObj.name);
-        socket.emit('user taken');
+        socket.emit('user taken', true);
       }
       else {
         socket.emit('created user', userObj);
@@ -103,7 +103,7 @@ io.on('connection', function(socket) {
         socket.emit('logged in', userObj);
       }
       else {
-        socket.emit('wrong user password');
+        socket.emit('wrong user password', true);
       }
     });
   });
