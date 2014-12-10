@@ -61,14 +61,15 @@ io.on('connection', function(socket) {
   /* room socket stuff */
   //Create room
   socket.on('new room',function(roomObj, userObj){
-    roomController.addNewroom(roomObj, userObj, function(isTaken){
-      console.log('addNewroom');
+    roomController.addNewRoom(roomObj, userObj, function(isTaken){
+      console.log('addNewRoom');
       //emit back to client
       if (isTaken) {
         console.log('room Name Taken: ' + roomObj.name);
         socket.emit('room taken', true);
       }
       else {
+        console.log("NEW ROOM");
         socket.emit('created room', roomObj);
       }
     });
@@ -87,7 +88,8 @@ io.on('connection', function(socket) {
 
   /* User socket stuff */
   //Sign-up
-  socket.on('user sign up',function(userObj){
+  socket.on('user sign in',function(userObj){
+    console.log("INSIDE USER SIGN IN SOCKET", userObj);
     userController.addNewUser(userObj,function(isTaken){
       console.log('addNewUser');
       //emit back to client
@@ -115,4 +117,6 @@ io.on('connection', function(socket) {
 
 //start listening
 var port = process.env.PORT || 8000;
-http.listen(port);
+http.listen(port, function() {
+  console.log("Listening to port 8000");
+});
