@@ -74,6 +74,7 @@ module.exports = {
   clearDB: function(req, res) {
     Message.remove(function(err) {
       if (!err) {
+        //TODO: Should redirect to '<project name>.html'
         res.redirect('/storm.html');
       }
     });
@@ -102,7 +103,7 @@ module.exports = {
 
       //if messageObject has parent then update parent
       if (!err && messageObject.parentID) {
-        module.exports(messageObject, callback);
+        module.exports.removeChildReferenceFromParent(messageObject, callback);
       } else {
         callback();
       }

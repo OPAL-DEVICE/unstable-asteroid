@@ -43,11 +43,7 @@ Socket.prototype.onLobbyTaken = function(callback) {
 	}
 }
 
-// lobby taken
-// created lobby
-// entered lobby
-// wrong lobby password
-// user taken
-// created user
-// logged in
-// wrong user password
+//Sends message with edit event
+Socket.prototype.sendLobby = function(message){
+  this.connection.emit('new room', message);
+};

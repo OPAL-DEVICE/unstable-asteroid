@@ -17,10 +17,10 @@ Once the project moves into development, the press release can be used as a touc
  -->
 
 ## Heading ##
-  > 'STORM
+  > Ponder
 
 ## Sub-Heading ##
-  > The organic brainstorming app
+  > A thinking app
 
 ## Summary ##
   > Allow instantaneous brainstorming of ideas among teammates. Collaborate in real time and rapidly share and build off other people's ideas.
@@ -35,10 +35,10 @@ Once the project moves into development, the press release can be used as a touc
   > "XXX provides a reliable and realtime environment to encourage indivduals to share and discuss their ideas among their peers."
 
 ## How to Get Started ##
-  > Visit www.storm.com, create a room, share the URL, then 'STORM.
+  > Visit www.ponder.com, create a room, share the URL, then Ponder.
 
 ## Customer Quote ##
-  > "'STORM has made our brainstorming sessions so much faster and more productive"
+  > "Ponder has made our brainstorming sessions so much faster and more productive"
 
 ## Closing and Call to Action ##
-  > 'STORM
+  > Ponder
