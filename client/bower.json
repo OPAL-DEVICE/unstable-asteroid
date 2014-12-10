@@ -1,9 +1,12 @@
 {
-  "name": "storm",
-  "version": "0.0.0",
-  "homepage": "https://github.com/christophertrev/unstable-asteroid",
+  "name": "Ponder",
+  "version": "0.0.1",
+  "homepage": "https://github.com/OPAL-DEVICE/unstable-asteroid",
   "authors": [
-    "Christopher Treviño <christophertrev@gmail.com>"
+    "Jimmy Gong <gong.jim@gmail.com>",
+    "Doug Phung <phung.doug@gmail.com",
+    "Caroline Wong <carowong5@gmail.com",
+    "Stephan Genyk <sgenyk91@gmail.com"
   ],
   "license": "MIT",
   "ignore": [
