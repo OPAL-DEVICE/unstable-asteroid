@@ -5,7 +5,7 @@ var Message  = require('./userModel'),
     mongoose = require('mongoose');
 
 //connects global mongoose variable to online MongoDB DB
-mongoose.connect('mongodb://MongoLab-d:tsWFfWiQkrxfZhKZbNOBPVGp3culnVTNs5G7nyd1cbE-@ds050077.mongolab.com:50077/MongoLab-d');
+mongoose.createConnection('mongodb://MongoLab-d:tsWFfWiQkrxfZhKZbNOBPVGp3culnVTNs5G7nyd1cbE-@ds050077.mongolab.com:50077/MongoLab-d');
 
 /**
  * helper functions that reference and modify messages in DB
