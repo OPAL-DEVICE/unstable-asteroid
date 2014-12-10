@@ -1,6 +1,6 @@
 'use strict';
 
-var Message  = require('./userModel'),
+var User  = require('./userModel'),
     Q        = require('q'),
     mongoose = require('mongoose');
 
@@ -21,6 +21,7 @@ mongoose.createConnection('mongodb://MongoLab-d:tsWFfWiQkrxfZhKZbNOBPVGp3culnVTN
       name: userObject.name,
       password: userObject.password
    };
+   console.log(newUser);
     
     //creates promises of query functions
     var createUser = Q.nbind(User.create, User);

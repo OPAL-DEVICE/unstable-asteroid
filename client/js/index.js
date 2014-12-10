@@ -2,29 +2,31 @@
 $(document).ready(function(){
 
 	var socket = new Socket();
+  var username;
 
 //on Button click, send the roomName over Sockets!
   $('#addRoomBtn').on('click', function(e){
   	e.preventDefault(); 
     var roomName = $('#roomInputName').val(); 
-   	
    	$('.RoomList').append('<li>'+roomName+'</li>');
+    $('roomInputName').val('');
 
-   	socket.createRoom(roomName); 
+   	socket.createRoom(roomName, username); 
 
   });
 
   //On login click, send username and password
-  $('#logInButton').on('click', function(e) {
+  $('#signInButton').on('click', function(e) {
   	e.preventDefault();
 
-  	var username = $('#username').val();
+  	username = $('#username').val();
   	var password = $('#password').val();
+    console.log(username);
 
   	socket.userSignIn(username, password);
   });
 
-    //Set listener
+  //Set listener
   socket.onRoomTaken(function(trucey) {
   	if (trucey) {
   		$('#roomForm').addClass('has-error');

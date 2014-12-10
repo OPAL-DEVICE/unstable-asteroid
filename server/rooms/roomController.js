@@ -1,8 +1,9 @@
 'use strict';
 
-var Message  = require('./roomModel'),
+var Room  = require('./roomModel'),
     Q        = require('q'),
     mongoose = require('mongoose');
+
 
 //connects global mongoose variable to online MongoDB DB
 mongoose.createConnection('mongodb://MongoLab-d:tsWFfWiQkrxfZhKZbNOBPVGp3culnVTNs5G7nyd1cbE-@ds050077.mongolab.com:50077/MongoLab-d');
@@ -24,7 +25,7 @@ mongoose.createConnection('mongodb://MongoLab-d:tsWFfWiQkrxfZhKZbNOBPVGp3culnVTN
       password: '',
       createdBy: userObject.name
    };
-    
+    console.log("INSIDE ADDNEWROOM");
     //creates promises of query functions
     var createRoom = Q.nbind(Room.create, Room);
     var findRoom = Q.nbind(Room.find, Room);
