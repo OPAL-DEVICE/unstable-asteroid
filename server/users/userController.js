@@ -24,12 +24,25 @@ mongoose.connect('mongodb://MongoLab-d:tsWFfWiQkrxfZhKZbNOBPVGp3culnVTNs5G7nyd1c
     
     //creates promises of query functions
     var createUser = Q.nbind(User.create, User);
+    var findUser = Q.nbind(User.find, User);
 
-    //creates and saves the lobby to the DB
-    createUser(newUser)
-    .then(function(createdUser) {
-      return createdUser;
-    }); 
+    //check for username duplication
+    findUser({ name: newUser.name })
+      .then(function(foundUser){
+        if(foundUser.length === 0) {
+          createUser(newUser)
+            .then(function(createdUser) {
+              return createdUser;
+            });
+        }
+        //Notify username taken
+        else {
+          callback(true);
+        }
+      })
+      .fail(function() {
+        console.error('Inappropriate Input')
+      });
 
   } //,
 

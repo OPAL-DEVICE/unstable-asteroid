@@ -54,20 +54,44 @@ io.on('connection', function(socket) {
     });
   });
 
-  //
-  socket.on('new room',function(lobbyObj){
-    lobbyController.addNewLobby(lobbyObj, function(){
+
+  //Lobby socket stuff
+  socket.on('new room',function(lobbyObj, userObj){
+    lobbyController.addNewLobby(lobbyObj, userObj, function(isTaken){
       console.log('addNewLobby');
       //emit back to client
-      //io.emit('created lobby');
+      if (isTaken) {
+        console.log('Lobby Name Taken: ' + lobbyObj.name);
+        socket.emit('lobby taken');
+      }
+      else {
+        socket.emit('created lobby');
+      }
+    });
+  });
+  socket.on('enter lobby', function(lobbyName, lobbyPass){
+    lobbyController.enterLobby(lobbyName, lobbyPass, function(didEnter){
+      if(didEnter) {
+        socket.emit('entered lobby');
+      }
+      else {
+        socket.emit('wrong password');
+      }
     });
   });
 
+  //User socket stuff
   socket.on('user sign in',function(userObj){
-    userController.addNewUser(userObj,function(){
+    userController.addNewUser(userObj,function(isTaken){
       console.log('addNewUser');
       //emit back to client
-      //io.emit('created user');
+      if (isTaken) {
+        console.log('Username taken: ' + userObj.name);
+        socket.emit('user taken');
+      }
+      else {
+        socket.emit('created user');
+      }
     });
   });
 });
