@@ -25,7 +25,7 @@ $(document).ready(function(){
   });
 
     //Set listener
-  socket.onLobbyTaken(function(trucey) {
+  socket.onRoomTaken(function(trucey) {
   	if (trucey) {
   		$('#roomForm').addClass('has-error');
   	}

@@ -37,13 +37,13 @@ Socket.prototype.userSignIn = function(username, password){
 	this.connection.emit('user sign in', {name: username, password: password}); 
 }
 
-Socket.prototype.onLobbyTaken = function(callback) {
-	this.connection.on('lobby taken'), function(trucey) {
+Socket.prototype.onRoomTaken = function(callback) {
+	this.connection.on('room taken'), function(trucey) {
 		callback(trucey);
 	}
 }
 
 //Sends message with edit event
-Socket.prototype.sendLobby = function(message){
+Socket.prototype.sendRoom = function(message){
   this.connection.emit('new room', message);
 };
