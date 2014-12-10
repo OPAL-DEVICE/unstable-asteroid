@@ -6,7 +6,7 @@ var messageController = require('../messages/messageController'),
     mongoose = require('mongoose'),
     Q = require('q');
 
-mongoose.createConnection('mongodb://127.0.0.1/test');
+mongoose.connect('mongodb://127.0.0.1/test');
 
 describe('MessageController Test', function() {
 
