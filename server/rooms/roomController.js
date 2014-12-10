@@ -1,6 +1,6 @@
 'use strict';
 
-var Message  = require('./lobbyModel'),
+var Message  = require('./roomModel'),
     Q        = require('q'),
     mongoose = require('mongoose');
 
@@ -13,12 +13,12 @@ mongoose.connect('mongodb://MongoLab-d:tsWFfWiQkrxfZhKZbNOBPVGp3culnVTNs5G7nyd1c
 
  module.exports = {
   /**
-  * create and store lobby object
+  * create and store room object
   * @params [Function] callback to be called after successful retrieval
   */
-  addNewLobby: function(lobbyObject, userObject, callback) { 
-   var newLobby = {
-      name: lobbyObject.name,
+  addNewRoom: function(roomObject, userObject, callback) { 
+   var newRoom = {
+      name: roomObject.name,
       users: [userObject.name],
       messages: [],
       password: '',
@@ -26,17 +26,17 @@ mongoose.connect('mongodb://MongoLab-d:tsWFfWiQkrxfZhKZbNOBPVGp3culnVTNs5G7nyd1c
    };
     
     //creates promises of query functions
-    var createLobby = Q.nbind(Lobby.create, Lobby);
-    var findLobby = Q.nbind(Lobby.find, Lobby);
+    var createRoom = Q.nbind(Room.create, Room);
+    var findRoom = Q.nbind(Room.find, Room);
 
-    //check if lobby already exists
-    findLobby({ name: newLobby.name})
-      .then(function(foundLobby){
-        if(foundLobby.length !== 0) {
-          //creates and saves the lobby to the DB
-          createLobby(newLobby)
-          .then(function(createdLobby) {
-            return createdLobby;
+    //check if room already exists
+    findRoom({ name: newRoom.name})
+      .then(function(foundRoom){
+        if(foundRoom.length !== 0) {
+          //creates and saves the room to the DB
+          createRoom(newRoom)
+          .then(function(createdRoom) {
+            return createdRoom;
           }); 
         }
         else {
@@ -50,26 +50,26 @@ mongoose.connect('mongodb://MongoLab-d:tsWFfWiQkrxfZhKZbNOBPVGp3culnVTNs5G7nyd1c
   },
 
   /**
-  * enter lobby when given lobby name
+  * enter room when given room name
   * @params [Function] callback to be called after successful retrieval
   */
   /**
-  * lobby authentication
+  * room authentication
   * @params [Function] callback to be called after successful retrieval
   */
   /**
-  * create and store lobby object. if password is null, public lobby
+  * create and store room object. if password is null, public room
   * @params [Function] callback to be called after successful retrieval
   */
   //PUBLIC: User not prompted for password, so this will be expecting an empty string
   //PRIVATE: User prompted for password
-  enterLobby: function(lobbyName, lobbyPassword, userObj, callback) {
-    var findLobby = Q.nbind(Lobby.find, Lobby);
-    findLobby({name: lobbyName})
-      .then(function(foundLobby){
-        if(foundLobby.length !== 0) {
-          if(foundLobby[0].password === lobbyPassword){
-            foundLobby[0].users.push(userObj.username)
+  enterRoom: function(roomName, roomPassword, userObj, callback) {
+    var findRoom = Q.nbind(Room.find, Room);
+    findRoom({name: roomName})
+      .then(function(foundRoom){
+        if(foundRoom.length !== 0) {
+          if(foundRoom[0].password === roomPassword){
+            foundRoom[0].users.push(userObj.username)
             callback(true);
           }
           //wrong password
@@ -87,18 +87,18 @@ mongoose.connect('mongodb://MongoLab-d:tsWFfWiQkrxfZhKZbNOBPVGp3culnVTNs5G7nyd1c
   },
 
   /**
-  * adds people to lobby when join
+  * adds people to room when join
   * @params [Function] callback to be called after successful retrieval
   */
 
   /**
-  * Removes user from lobby
-  * @params [Object] lobby object
+  * Removes user from room
+  * @params [Object] room object
             [String] user's username to be removed 
   */
-  exitLobby: function(lobbyObj, userObj){
-    var userIndex = lobbyObj.users.indexOf(userObj.name);
-    lobbyObj.splice(userIndex, 1);
+  exitRoom: function(roomObj, userObj){
+    var userIndex = roomObj.users.indexOf(userObj.name);
+    roomObj.splice(userIndex, 1);
   } //,
   
 

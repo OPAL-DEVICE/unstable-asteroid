@@ -19,8 +19,7 @@ mongoose.connect('mongodb://MongoLab-d:tsWFfWiQkrxfZhKZbNOBPVGp3culnVTNs5G7nyd1c
   addNewUser: function(userObject, callback) { 
    var newUser = {
       name: userObject.name,
-      password: userObject.password,
-      lobby: ''
+      password: userObject.password
    };
     
     //creates promises of query functions
@@ -48,7 +47,7 @@ mongoose.connect('mongodb://MongoLab-d:tsWFfWiQkrxfZhKZbNOBPVGp3culnVTNs5G7nyd1c
 
   login: function(userName, userPassword, callback) {
     var findUser = Q.nbind(User.find, User);
-    findLobby({name: userName})
+    findUser({name: userName})
       .then(function(foundUser){
         if(foundUser.length !== 0) {
           if(foundUser[0].password === userPassword){

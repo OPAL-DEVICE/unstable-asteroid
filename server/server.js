@@ -4,6 +4,8 @@ var app = express();
 var http = require('http').Server(app);
 var io = require('socket.io')(http);
 var messageController = require('./messages/messageController');
+var userController = require('./users/userController');
+var roomController = require('./rooms/roomController');
 var clearURL = '/storm.html/clear';
 
 //serve static files
@@ -56,27 +58,29 @@ io.on('connection', function(socket) {
   });
 
 
-  //Lobby socket stuff
-  socket.on('new room',function(lobbyObj, userObj){
-    lobbyController.addNewLobby(lobbyObj, userObj, function(isTaken){
-      console.log('addNewLobby');
+  /* room socket stuff */
+  //Create room
+  socket.on('new room',function(roomObj, userObj){
+    roomController.addNewroom(roomObj, userObj, function(isTaken){
+      console.log('addNewroom');
       //emit back to client
       if (isTaken) {
-        console.log('Lobby Name Taken: ' + lobbyObj.name);
-        socket.emit('lobby taken', true);
+        console.log('room Name Taken: ' + roomObj.name);
+        socket.emit('room taken', true);
       }
       else {
-        socket.emit('created lobby', lobbyObj);
+        socket.emit('created room', roomObj);
       }
     });
   });
-  socket.on('enter lobby', function(lobbyName, lobbyPass, userObj){
-    lobbyController.enterLobby(lobbyName, lobbyPass, userObj, function(isAuthentic){
+  //Enter room
+  socket.on('enter room', function(roomName, roomPass, userObj){
+    roomController.enterRoom(roomName, roomPass, userObj, function(isAuthentic){
       if(isAuthentic) {
-        socket.emit('entered lobby', lobbyObj);
+        socket.emit('entered room', roomObj);
       }
       else {
-        socket.emit('wrong lobby password', true);
+        socket.emit('wrong room password', true);
       }
     });
   });
