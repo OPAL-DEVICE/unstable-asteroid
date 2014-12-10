@@ -4,6 +4,7 @@ var app = express();
 var http = require('http').Server(app);
 var io = require('socket.io')(http);
 var messageController = require('./messages/messageController');
+var clearURL = '/storm.html/clear';
 
 //serve static files
 app.use(express.static(__dirname + '/../client') );
@@ -16,7 +17,7 @@ app.get('/', function(req, res) {
 });
 
 //clear database when '/storm.html/clear' is visited
-app.get('/storm.html/clear', function(req, res) {
+app.get(clearURL, function(req, res) {
   messageController.clearDB(req, res);
 });
 
@@ -54,20 +55,56 @@ io.on('connection', function(socket) {
     });
   });
 
-  //
-  socket.on('new room',function(lobbyObj){
-    lobbyController.addNewLobby(lobbyObj, function(){
+
+  //Lobby socket stuff
+  socket.on('new room',function(lobbyObj, userObj){
+    lobbyController.addNewLobby(lobbyObj, userObj, function(isTaken){
       console.log('addNewLobby');
       //emit back to client
-      //io.emit('created lobby');
+      if (isTaken) {
+        console.log('Lobby Name Taken: ' + lobbyObj.name);
+        socket.emit('lobby taken');
+      }
+      else {
+        socket.emit('created lobby', lobbyObj);
+      }
+    });
+  });
+  socket.on('enter lobby', function(lobbyName, lobbyPass){
+    lobbyController.enterLobby(lobbyName, lobbyPass, function(isAuthentic){
+      if(isAuthentic) {
+        socket.emit('entered lobby', lobbyObj);
+      }
+      else {
+        socket.emit('wrong lobby password');
+      }
     });
   });
 
-  socket.on('user sign in',function(userObj){
-    userController.addNewUser(userObj,function(){
+  /* User socket stuff */
+  //Sign-up
+  socket.on('user sign up',function(userObj){
+    userController.addNewUser(userObj,function(isTaken){
       console.log('addNewUser');
       //emit back to client
-      //io.emit('created user');
+      if (isTaken) {
+        console.log('Username taken: ' + userObj.name);
+        socket.emit('user taken');
+      }
+      else {
+        socket.emit('created user', userObj);
+      }
+    });
+  });
+  //Login
+  socket.on('user login', function(userName, userPass){
+    userController.Login(userName, userPass, function(isAuthentic){
+      if(isAuthentic) {
+        socket.emit('logged in', userObj);
+      }
+      else {
+        socket.emit('wrong user password');
+      }
     });
   });
 });

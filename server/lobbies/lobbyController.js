@@ -27,20 +27,53 @@ mongoose.connect('mongodb://MongoLab-d:tsWFfWiQkrxfZhKZbNOBPVGp3culnVTNs5G7nyd1c
     
     //creates promises of query functions
     var createLobby = Q.nbind(Lobby.create, Lobby);
+    var findLobby = Q.nbind(Lobby.find, Lobby);
 
-    //creates and saves the lobby to the DB
-    createLobby(newLobby)
-    .then(function(createdLobby) {
-      return createdLobby;
-    }); 
+    //check if lobby already exists
+    findLobby({ name: newLobby.name})
+      .then(function(foundLobby){
+        if(foundLobby.length !== 0) {
+          //creates and saves the lobby to the DB
+          createLobby(newLobby)
+          .then(function(createdLobby) {
+            return createdLobby;
+          }); 
+        }
+        else {
+          callback(true);
+        }
+      })
+      .fail(function(){
+        console.error('Inappropriate input');
+      });
 
-  } //,
-
+  },
 
   /**
   * enter lobby when given lobby name
   * @params [Function] callback to be called after successful retrieval
   */
+  enterLobby: function(lobbyName, lobbyPassword, callback) {
+    var findLobby = Q.nbind(Lobby.find, Lobby);
+    findLobby({name: lobbyName})
+      .then(function(foundLobby){
+        if(foundLobby.length !== 0) {
+          if(foundLobby[0].password === lobbyPassword){
+            callback(true);
+          }
+          //wrong password
+          else {
+            callback(false);
+          }
+        }
+        else {
+          callback(false);
+        }
+      })
+      .fail(function() {
+        console.error('Inappropriate input');
+      });
+  } //,
 
   /**
   * lobby authentication

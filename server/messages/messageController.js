@@ -74,6 +74,7 @@ module.exports = {
   clearDB: function(req, res) {
     Message.remove(function(err) {
       if (!err) {
+        //TODO: Should redirect to '<project name>.html'
         res.redirect('/storm.html');
       }
     });
