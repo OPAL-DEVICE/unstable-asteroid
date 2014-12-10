@@ -53,6 +53,23 @@ io.on('connection', function(socket) {
       sendFullMessageTree();
     });
   });
+
+  //
+  socket.on('new room',function(lobbyObj){
+    lobbyController.addNewLobby(lobbyObj, function(){
+      console.log('addNewLobby');
+      //emit back to client
+      //io.emit('created lobby');
+    });
+  });
+
+  socket.on('user sign in',function(userObj){
+    userController.addNewUser(userObj,function(){
+      console.log('addNewUser');
+      //emit back to client
+      //io.emit('created user');
+    });
+  });
 });
 
 //start listening

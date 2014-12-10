@@ -182,9 +182,9 @@ function click(d) {
     nodeSelected = nodeSelected === d ? null : d;
 
     //If not just deselected, if the node has children it cannot be deleted
-    if(nodeSelected !== null && nodeSelected.children.length === 0){
+    if(nodeSelected !== null && nodeSelected.children.length === 0) {
         allowRemoval();
-    }else{
+    } else {
       disallowRemoval();
     }
     update();
