@@ -49,7 +49,6 @@ mongoose.connect('mongodb://MongoLab-d:tsWFfWiQkrxfZhKZbNOBPVGp3culnVTNs5G7nyd1c
 
   },
 
-
   /**
   * enter lobby when given lobby name
   * @params [Function] callback to be called after successful retrieval
@@ -59,9 +58,21 @@ mongoose.connect('mongodb://MongoLab-d:tsWFfWiQkrxfZhKZbNOBPVGp3culnVTNs5G7nyd1c
     findLobby({name: lobbyName})
       .then(function(foundLobby){
         if(foundLobby.length !== 0) {
-          
+          if(foundLobby[0].password === lobbyPassword){
+            callback(true);
+          }
+          //wrong password
+          else {
+            callback(false);
+          }
+        }
+        else {
+          callback(false);
         }
       })
+      .fail(function() {
+        console.error('Inappropriate input');
+      });
   } //,
 
   /**

@@ -4,6 +4,7 @@ var app = express();
 var http = require('http').Server(app);
 var io = require('socket.io')(http);
 var messageController = require('./messages/messageController');
+var clearURL = '/storm.html/clear';
 
 //serve static files
 app.use(express.static(__dirname + '/../client') );
@@ -16,7 +17,7 @@ app.get('/', function(req, res) {
 });
 
 //clear database when '/storm.html/clear' is visited
-app.get('/storm.html/clear', function(req, res) {
+app.get(clearURL, function(req, res) {
   messageController.clearDB(req, res);
 });
 
@@ -65,23 +66,24 @@ io.on('connection', function(socket) {
         socket.emit('lobby taken');
       }
       else {
-        socket.emit('created lobby');
+        socket.emit('created lobby', lobbyObj);
       }
     });
   });
   socket.on('enter lobby', function(lobbyName, lobbyPass){
-    lobbyController.enterLobby(lobbyName, lobbyPass, function(didEnter){
-      if(didEnter) {
-        socket.emit('entered lobby');
+    lobbyController.enterLobby(lobbyName, lobbyPass, function(isAuthentic){
+      if(isAuthentic) {
+        socket.emit('entered lobby', lobbyObj);
       }
       else {
-        socket.emit('wrong password');
+        socket.emit('wrong lobby password');
       }
     });
   });
 
-  //User socket stuff
-  socket.on('user sign in',function(userObj){
+  /* User socket stuff */
+  //Sign-up
+  socket.on('user sign up',function(userObj){
     userController.addNewUser(userObj,function(isTaken){
       console.log('addNewUser');
       //emit back to client
@@ -90,7 +92,18 @@ io.on('connection', function(socket) {
         socket.emit('user taken');
       }
       else {
-        socket.emit('created user');
+        socket.emit('created user', userObj);
+      }
+    });
+  });
+  //Login
+  socket.on('user login', function(userName, userPass){
+    userController.Login(userName, userPass, function(isAuthentic){
+      if(isAuthentic) {
+        socket.emit('logged in', userObj);
+      }
+      else {
+        socket.emit('wrong user password');
       }
     });
   });

@@ -44,7 +44,28 @@ mongoose.connect('mongodb://MongoLab-d:tsWFfWiQkrxfZhKZbNOBPVGp3culnVTNs5G7nyd1c
         console.error('Inappropriate Input')
       });
 
-  } //,
+  },
+  login: function(userName, userPassword, callback) {
+    var findUser = Q.nbind(User.find, User);
+    findLobby({name: userName})
+      .then(function(foundUser){
+        if(foundUser.length !== 0) {
+          if(foundUser[0].password === userPassword){
+            callback(true);
+          }
+          //wrong password
+          else {
+            callback(false);
+          }
+        }
+        else {
+          callback(false);
+        }
+      })
+      .fail(function() {
+        console.error('Inappropriate input');
+      });
+  }
 
   
 
