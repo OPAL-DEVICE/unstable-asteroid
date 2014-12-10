@@ -6,10 +6,10 @@ var mongoose = require('mongoose');
 //unqiue _id created by default
 var LobbySchema = new mongoose.Schema({
   name: String,
-  usersId: [mongoose.Schema.Types.ObjectId],
+  users: [String],
   messages: { type : Array , "default" : [] },
   password: String,
-  createdBy: [mongoose.Schema.Types.ObjectId]
+  createdBy: String
 });
 
 module.exports = mongoose.model('Lobby', LobbySchema);

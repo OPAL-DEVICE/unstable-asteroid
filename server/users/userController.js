@@ -19,7 +19,8 @@ mongoose.connect('mongodb://MongoLab-d:tsWFfWiQkrxfZhKZbNOBPVGp3culnVTNs5G7nyd1c
   addNewUser: function(userObject, callback) { 
    var newUser = {
       name: userObject.name,
-      password: userObject.password
+      password: userObject.password,
+      lobby: ''
    };
     
     //creates promises of query functions
@@ -41,10 +42,10 @@ mongoose.connect('mongodb://MongoLab-d:tsWFfWiQkrxfZhKZbNOBPVGp3culnVTNs5G7nyd1c
         }
       })
       .fail(function() {
-        console.error('Inappropriate Input')
+        console.error('dInappropriate Input')
       });
-
   },
+
   login: function(userName, userPassword, callback) {
     var findUser = Q.nbind(User.find, User);
     findLobby({name: userName})
@@ -65,7 +66,7 @@ mongoose.connect('mongodb://MongoLab-d:tsWFfWiQkrxfZhKZbNOBPVGp3culnVTNs5G7nyd1c
       .fail(function() {
         console.error('Inappropriate input');
       });
-  }
+  } //,
 
   
 
