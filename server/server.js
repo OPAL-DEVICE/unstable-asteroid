@@ -25,21 +25,21 @@ app.get(clearURL, function(req, res) {
 
 //open a socket between the client and server
 io.on('connection', function(socket) {
-  var sendFullMessageTree = function() {
-    messageController.getFullMessageTree(function(messages) {
+  var sendFullMessageTree = function(roomObj) {
+    messageController.getFullMessageTree(roomObj, function(messages) {
       io.emit('all messages', messages);
     });
   };
 
   //send all current messages to only the newly connected user
-  messageController.getFullMessageTree(function(messages) {
-    socket.emit('all messages', messages);
-  });
+  // messageController.getFullMessageTree(roomObj, function(messages) {
+  //   socket.emit('all messages', messages);
+  // });
 
   //send all current messages to all users when a new message has been added
-  socket.on('new message', function(msg) {
+  socket.on('new message', function(roomObj, msg) {
     messageController.addNewMessage(msg, function() {
-      sendFullMessageTree();
+      sendFullMessageTree(roomObj);
     });
   });
 
@@ -47,7 +47,14 @@ io.on('connection', function(socket) {
   socket.on('edit message',function(msg){
     messageController.editMessage(msg,function(){
       sendFullMessageTree();
-    })
+    });
+  });
+
+  //send all current messages to room after a message has had a file attached
+  socket.on('add file', function(msg) {
+    messageController.addFileToMessage(msg, function(){
+      sendFullMessageTree();
+    });
   });
 
   //send all current messages to all users after a message has been removed
@@ -76,9 +83,10 @@ io.on('connection', function(socket) {
   });
   //Enter room
   socket.on('enter room', function(roomName, roomPass, userObj){
-    roomController.enterRoom(roomName, roomPass, userObj, function(isAuthentic){
+    roomController.enterRoom(roomName, roomPass, userObj, function(isAuthentic, roomObj){
       if(isAuthentic) {
         socket.emit('entered room', roomObj);
+        sendFullMessageTree(roomObj);
       }
       else {
         socket.emit('wrong room password', true);

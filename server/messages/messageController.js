@@ -16,15 +16,15 @@ module.exports = {
    * return array of constructed trees
    * @params [Function] callback to be called after successful retrieval
    */
-  getFullMessageTree: function(callback) {
+  getFullMessageTree: function(roomObject, callback) {
     var getMessageTree = Q.nbind(Message.find, Message);
 
-    getMessageTree({})
+    getMessageTree({roomID: roomObject.roomID})
       .then(function (messages) {
         callback(module.exports.constructRootsArray(messages));
       })
       .fail(function (error) {
-        console.log(error);
+        console.error(error);
       });
   },
 
@@ -41,7 +41,8 @@ module.exports = {
       message: messageObject.message,
       parentID: messageObject.parentID,
       roomID: messageObject.roomID,
-      childrenID: []
+      childrenID: [], 
+      fileURL: null
     };
 
     //creates promises of query functions
@@ -89,6 +90,14 @@ module.exports = {
   editMessage: function(messageObject, callback) {
     Message.update({ _id: messageObject._id}, { message: messageObject.message }, function(err, updatedMessage) {
       if (!err) {
+        callback();
+      }
+    });
+  },
+
+  addFileToMessage: function(messageObject, callback) {
+    Message.update({ _id: messageObject._id}, { file: messageObject.fileURL}, function(err, updatedMessage) {
+      if(!err) {
         callback();
       }
     });
