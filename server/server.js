@@ -83,9 +83,10 @@ io.on('connection', function(socket) {
   });
   //Enter room
   socket.on('enter room', function(roomName, roomPass, userObj){
-    roomController.enterRoom(roomName, roomPass, userObj, function(isAuthentic){
+    roomController.enterRoom(roomName, roomPass, userObj, function(isAuthentic, roomObj){
       if(isAuthentic) {
         socket.emit('entered room', roomObj);
+        sendFullMessageTree(roomObj);
       }
       else {
         socket.emit('wrong room password', true);

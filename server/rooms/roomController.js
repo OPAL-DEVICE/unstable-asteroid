@@ -70,7 +70,7 @@ var Room  = require('./roomModel'),
         if(foundRoom.length !== 0) {
           if(foundRoom[0].password === roomPassword){
             foundRoom[0].users.push(userObj.username)
-            callback(true);
+            callback(true, foundRoom[0]);
           }
           //wrong password
           else {
