@@ -104,13 +104,15 @@ io.on('connection', function(socket) {
     });
   });
   //Login
-  socket.on('user login', function(userName, userPass){
-    userController.Login(userName, userPass, function(isAuthentic){
+  socket.on('user login', function(userObj, userPass){
+    userController.login(userObj, function(isAuthentic){
       if(isAuthentic) {
         socket.emit('logged in', userObj);
+        console.log('LOGGED IN');
       }
       else {
         socket.emit('wrong user password', true);
+        console.log('wrong password'); 
       }
     });
   });

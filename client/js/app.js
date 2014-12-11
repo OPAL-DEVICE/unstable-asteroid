@@ -55,6 +55,8 @@ $(document).ready(function(){
     }
   });
 
+  
+
   $('.btn.remove').on('click',function(e){
     //Emit message to db
     var messageObject = {};
