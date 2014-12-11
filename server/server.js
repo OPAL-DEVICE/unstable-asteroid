@@ -112,7 +112,7 @@ io.on('connection', function(socket) {
       }
       else {
         socket.emit('wrong user password', true);
-        console.log('wrong password'); 
+        console.log('WRONG USER PASSWORD'); 
       }
     });
   });
