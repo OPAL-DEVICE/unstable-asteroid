@@ -40,6 +40,7 @@ module.exports = {
     var newMessage = {
       message: messageObject.message,
       parentID: messageObject.parentID,
+      roomID: messageObject.roomID,
       childrenID: []
     };
 

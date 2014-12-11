@@ -50,7 +50,6 @@ mongoose.connect('mongodb://MongoLab-d:tsWFfWiQkrxfZhKZbNOBPVGp3culnVTNs5G7nyd1c
 
   login: function(userObject, callback) {
     var findUser = Q.nbind(User.find, User);
-    console.log("NOT BROKEN HERE");
     findUser({name: userObject.name})
     .then(function(foundUser){
       if(foundUser.length !== 0) {

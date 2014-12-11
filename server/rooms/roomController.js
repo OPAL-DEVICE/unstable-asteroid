@@ -22,7 +22,6 @@ var Room  = require('./roomModel'),
       password: '', //MAKE PASSWORD HERE ROOMOBJECT.PASSWORD
       createdBy: userObject.name
    };
-    console.log("INSIDE ADDNEWROOM");
     //creates promises of query functions
     var createRoom = Q.nbind(Room.create, Room);
     var findRoom = Q.nbind(Room.find, Room);
@@ -36,7 +35,6 @@ var Room  = require('./roomModel'),
           //creates and saves the room to the DB
           createRoom(newRoom)
             .then(function(createdRoom) {
-              console.log("NOT BROKEN HERE");
               callback(false);
               return createdRoom;
           });
@@ -101,6 +99,17 @@ var Room  = require('./roomModel'),
   exitRoom: function(roomObj, userObj){
     var userIndex = roomObj.users.indexOf(userObj.name);
     roomObj.splice(userIndex, 1);
+  },
+
+  getAllRooms: function(callback){
+    var findRooms = Q.nbind(Room.find, Room);
+    findRooms({})
+      .then(function(rooms){
+        callback(rooms);
+      })
+      .fail(function(err, data){
+        console.error("getAllRooms failed: ", err);
+      });
   } //,
   
 
