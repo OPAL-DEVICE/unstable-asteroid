@@ -61,24 +61,25 @@ io.on('connection', function(socket) {
   /* room socket stuff */
   //Create room
   socket.on('new room',function(roomObj, userObj){
-    roomController.addNewRoom(roomObj, userObj, function(isTaken){
+    roomController.addNewRoom(roomObj, userObj, function(isTaken, createdRoom){
       console.log('addNewRoom');
       //emit back to client
       if (isTaken) {
         console.log('Room Name Taken: ' + roomObj.name);
         socket.emit('room taken', true);
       }
+      //Room name not yet taken, create
       else {
         console.log("NEW ROOM");
-        socket.emit('created room', roomObj);
+        socket.emit('created room', createdRoom);
       }
     });
   });
   //Enter room
   socket.on('enter room', function(roomName, roomPass, userObj){
-    roomController.enterRoom(roomName, roomPass, userObj, function(isAuthentic){
+    roomController.enterRoom(roomName, roomPass, userObj, function(isAuthentic, enteredRoom){
       if(isAuthentic) {
-        socket.emit('entered room', roomObj);
+        socket.emit('entered room', enteredRoom);
       }
       else {
         socket.emit('wrong room password', true);
@@ -95,7 +96,7 @@ io.on('connection', function(socket) {
   //Sign-up
   socket.on('user sign in',function(userObj){
     console.log("INSIDE USER SIGN IN SOCKET", userObj);
-    userController.addNewUser(userObj,function(isTaken){
+    userController.addNewUser(userObj,function(isTaken, rooms){
       console.log('addNewUser');
       //emit back to client
       if (isTaken) {
@@ -103,15 +104,16 @@ io.on('connection', function(socket) {
         socket.emit('user taken', true);
       }
       else {
-        socket.emit('created user', userObj);
+        socket.emit('created user', rooms);
       }
     });
   });
   //Login
   socket.on('user login', function(userName, userPass){
-    userController.Login(userName, userPass, function(isAuthentic){
+    userController.Login(userName, userPass, function(isAuthentic, rooms){
       if(isAuthentic) {
-        socket.emit('logged in', userObj);
+        //sends back rooms
+        socket.emit('logged in', rooms);
       }
       else {
         socket.emit('wrong user password', true);

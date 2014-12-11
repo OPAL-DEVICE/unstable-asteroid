@@ -1,6 +1,7 @@
 'use strict';
 
 var User  = require('./userModel'),
+    Room  = require('../rooms/roomModel'),
     Q        = require('q'),
     mongoose = require('mongoose');
 
@@ -14,6 +15,7 @@ mongoose.createConnection('mongodb://MongoLab-d:tsWFfWiQkrxfZhKZbNOBPVGp3culnVTN
  module.exports = {
   /**
   * create and store user obj
+  * TODO: Return all rooms to client
   * @params [Function] callback to be called after successful retrieval
   */
   addNewUser: function(userObject, callback) { 
@@ -26,6 +28,7 @@ mongoose.createConnection('mongodb://MongoLab-d:tsWFfWiQkrxfZhKZbNOBPVGp3culnVTN
     //creates promises of query functions
     var createUser = Q.nbind(User.create, User);
     var findUser = Q.nbind(User.find, User);
+    var findRooms = Q.nbind(Room.find, Room);
 
     //check for username duplication
     findUser({ name: newUser.name })
@@ -33,7 +36,12 @@ mongoose.createConnection('mongodb://MongoLab-d:tsWFfWiQkrxfZhKZbNOBPVGp3culnVTN
         if(foundUser.length === 0) {
           createUser(newUser)
             .then(function(createdUser) {
-              return createdUser;
+              //if user successfully created, send back rooms
+              findRooms({})
+                .then(function(rooms){
+                  callback(createdUser, rooms);
+                  return createdUser;
+                })
             });
         }
         //Notify username taken
@@ -45,14 +53,22 @@ mongoose.createConnection('mongodb://MongoLab-d:tsWFfWiQkrxfZhKZbNOBPVGp3culnVTN
         console.error('Inappropriate Input')
       });
   },
-
+  /**
+  * return user obj if username and password match
+  * @params [Function] callback to be called after successful retrieval
+  */
   login: function(userName, userPassword, callback) {
     var findUser = Q.nbind(User.find, User);
+    var findRooms = Q.nbind(Room.find, Room);
+
     findUser({name: userName})
       .then(function(foundUser){
         if(foundUser.length !== 0) {
           if(foundUser[0].password === userPassword){
-            callback(true);
+            findRooms({})
+              .then(function(rooms) {
+                callback(true, rooms);
+              });
           }
           //wrong password
           else {

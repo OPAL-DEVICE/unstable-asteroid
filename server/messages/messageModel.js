@@ -8,6 +8,7 @@ var mongoose = require('mongoose'),
 //unqiue _id created by default
 var MessageSchema = new mongoose.Schema({
   message: String,
+  roomID: String,
   parentID: mongoose.Schema.Types.ObjectId,
   childrenID: [mongoose.Schema.Types.ObjectId],
 });

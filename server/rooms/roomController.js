@@ -22,10 +22,9 @@ mongoose.createConnection('mongodb://MongoLab-d:tsWFfWiQkrxfZhKZbNOBPVGp3culnVTN
       name: roomObject.name,
       users: [userObject.name],
       messages: [],
-      password: '',
+      password: roomObject.password,
       createdBy: userObject.name
    };
-    console.log("INSIDE ADDNEWROOM");
     //creates promises of query functions
     var createRoom = Q.nbind(Room.create, Room);
     var findRoom = Q.nbind(Room.find, Room);
@@ -33,10 +32,11 @@ mongoose.createConnection('mongodb://MongoLab-d:tsWFfWiQkrxfZhKZbNOBPVGp3culnVTN
     //check if room already exists
     findRoom({ name: newRoom.name})
       .then(function(foundRoom){
-        if(foundRoom.length !== 0) {
+        if(foundRoom.length === 0) {
           //creates and saves the room to the DB
           createRoom(newRoom)
           .then(function(createdRoom) {
+            callback(false, createdRoom);
             return createdRoom;
           }); 
         }
@@ -71,7 +71,7 @@ mongoose.createConnection('mongodb://MongoLab-d:tsWFfWiQkrxfZhKZbNOBPVGp3culnVTN
         if(foundRoom.length !== 0) {
           if(foundRoom[0].password === roomPassword){
             foundRoom[0].users.push(userObj.username)
-            callback(true);
+            callback(true, foundRoom[0]);
           }
           //wrong password
           else {
@@ -101,6 +101,10 @@ mongoose.createConnection('mongodb://MongoLab-d:tsWFfWiQkrxfZhKZbNOBPVGp3culnVTN
     var userIndex = roomObj.users.indexOf(userObj.name);
     roomObj.users.splice(userIndex, 1);
   } //,
+  /**
+  *
+  *
+  */
   
 
  };
