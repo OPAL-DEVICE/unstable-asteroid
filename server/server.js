@@ -89,17 +89,15 @@ io.on('connection', function(socket) {
   /* User socket stuff */
   //Sign-up
   socket.on('user sign up',function(userObj){
-    console.log("INSIDE USER SIGN IN SOCKET", userObj);
     userController.addNewUser(userObj,function(isTaken){
-      console.log('addNewUser');
-      //emit back to client
       if (isTaken) {
-        console.log('Username taken: ' + userObj.name);
         socket.emit('user taken', true);
       }
       else {
-        console.log('CREATED NEW USER');
-        socket.emit('created user', userObj);
+        roomController.getAllRooms(function(rooms){
+          console.log("USER SIGNED UP", rooms);
+          socket.emit('created user', rooms);
+        });
       }
     });
   });
@@ -107,12 +105,13 @@ io.on('connection', function(socket) {
   socket.on('user login', function(userObj, userPass){
     userController.login(userObj, function(isAuthentic){
       if(isAuthentic) {
-        socket.emit('logged in', userObj);
-        console.log('LOGGED IN');
+        roomController.getAllRooms(function(rooms){
+          console.log("USER LOGGED IN", rooms)
+          socket.emit('logged in', rooms);
+        });
       }
       else {
         socket.emit('wrong user password', true);
-        console.log('wrong password'); 
       }
     });
   });

@@ -19,7 +19,7 @@ module.exports = {
   getFullMessageTree: function(callback) {
     var getMessageTree = Q.nbind(Message.find, Message);
 
-    getMessageTree({ roomID: })
+    getMessageTree({})
       .then(function (messages) {
         callback(module.exports.constructRootsArray(messages));
       })

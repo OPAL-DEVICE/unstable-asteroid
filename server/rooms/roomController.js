@@ -99,6 +99,17 @@ var Room  = require('./roomModel'),
   exitRoom: function(roomObj, userObj){
     var userIndex = roomObj.users.indexOf(userObj.name);
     roomObj.splice(userIndex, 1);
+  },
+
+  getAllRooms: function(callback){
+    var findRooms = Q.nbind(Room.find, Room);
+    findRooms({})
+      .then(function(rooms){
+        callback(rooms);
+      })
+      .fail(function(err, data){
+        console.error("getAllRooms failed: ", err);
+      });
   } //,
   
 
