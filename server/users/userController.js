@@ -42,7 +42,7 @@ mongoose.createConnection('mongodb://MongoLab-d:tsWFfWiQkrxfZhKZbNOBPVGp3culnVTN
         }
       })
       .fail(function() {
-        console.error('dInappropriate Input')
+        console.error('Inappropriate Input')
       });
   },
 
