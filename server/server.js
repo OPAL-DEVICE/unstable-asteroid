@@ -61,42 +61,36 @@ io.on('connection', function(socket) {
   /* room socket stuff */
   //Create room
   socket.on('new room',function(roomObj, userObj){
-    roomController.addNewRoom(roomObj, userObj, function(isTaken, createdRoom){
+    roomController.addNewRoom(roomObj, userObj, function(isTaken){
       console.log('addNewRoom');
       //emit back to client
       if (isTaken) {
-        console.log('Room Name Taken: ' + roomObj.name);
+        console.log('room Name Taken: ' + roomObj.name);
         socket.emit('room taken', true);
       }
-      //Room name not yet taken, create
       else {
         console.log("NEW ROOM");
-        socket.emit('created room', createdRoom);
+        socket.emit('created room', roomObj);
       }
     });
   });
   //Enter room
   socket.on('enter room', function(roomName, roomPass, userObj){
-    roomController.enterRoom(roomName, roomPass, userObj, function(isAuthentic, enteredRoom){
+    roomController.enterRoom(roomName, roomPass, userObj, function(isAuthentic){
       if(isAuthentic) {
-        socket.emit('entered room', enteredRoom);
+        socket.emit('entered room', roomObj);
       }
       else {
         socket.emit('wrong room password', true);
       }
     });
   });
-  socket.on('exit room', function(roomObj, userObj){
-    roomController.exitRoom(roomObj, userObj, function(){
-      socket.emit('exited room', roomObj);
-    });
-  });
 
   /* User socket stuff */
   //Sign-up
-  socket.on('user sign in',function(userObj){
+  socket.on('user sign up',function(userObj){
     console.log("INSIDE USER SIGN IN SOCKET", userObj);
-    userController.addNewUser(userObj,function(isTaken, rooms){
+    userController.addNewUser(userObj,function(isTaken){
       console.log('addNewUser');
       //emit back to client
       if (isTaken) {
@@ -104,19 +98,21 @@ io.on('connection', function(socket) {
         socket.emit('user taken', true);
       }
       else {
-        socket.emit('created user', rooms);
+        console.log('CREATED NEW USER');
+        socket.emit('created user', userObj);
       }
     });
   });
   //Login
-  socket.on('user login', function(userName, userPass){
-    userController.Login(userName, userPass, function(isAuthentic, rooms){
+  socket.on('user login', function(userObj, userPass){
+    userController.login(userObj, function(isAuthentic){
       if(isAuthentic) {
-        //sends back rooms
-        socket.emit('logged in', rooms);
+        socket.emit('logged in', userObj);
+        console.log('LOGGED IN');
       }
       else {
         socket.emit('wrong user password', true);
+        console.log('wrong password'); 
       }
     });
   });

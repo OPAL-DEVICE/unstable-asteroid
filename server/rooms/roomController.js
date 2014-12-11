@@ -5,9 +5,6 @@ var Room  = require('./roomModel'),
     mongoose = require('mongoose');
 
 
-//connects global mongoose variable to online MongoDB DB
-mongoose.createConnection('mongodb://MongoLab-d:tsWFfWiQkrxfZhKZbNOBPVGp3culnVTNs5G7nyd1cbE-@ds050077.mongolab.com:50077/MongoLab-d');
-
 /**
  * helper functions that reference and modify messages in DB
  */
@@ -22,23 +19,25 @@ mongoose.createConnection('mongodb://MongoLab-d:tsWFfWiQkrxfZhKZbNOBPVGp3culnVTN
       name: roomObject.name,
       users: [userObject.name],
       messages: [],
-      password: roomObject.password,
+      password: '', //MAKE PASSWORD HERE ROOMOBJECT.PASSWORD
       createdBy: userObject.name
    };
     //creates promises of query functions
     var createRoom = Q.nbind(Room.create, Room);
     var findRoom = Q.nbind(Room.find, Room);
+    console.log(JSON.stringify(findRoom()));
 
     //check if room already exists
-    findRoom({ name: newRoom.name})
+    findRoom({ name: newRoom.name })
       .then(function(foundRoom){
+        console.log(foundRoom.length);
         if(foundRoom.length === 0) {
           //creates and saves the room to the DB
           createRoom(newRoom)
-          .then(function(createdRoom) {
-            callback(false, createdRoom);
-            return createdRoom;
-          }); 
+            .then(function(createdRoom) {
+              callback(false);
+              return createdRoom;
+          });
         }
         else {
           callback(true);
@@ -71,7 +70,7 @@ mongoose.createConnection('mongodb://MongoLab-d:tsWFfWiQkrxfZhKZbNOBPVGp3culnVTN
         if(foundRoom.length !== 0) {
           if(foundRoom[0].password === roomPassword){
             foundRoom[0].users.push(userObj.username)
-            callback(true, foundRoom[0]);
+            callback(true);
           }
           //wrong password
           else {
@@ -97,14 +96,10 @@ mongoose.createConnection('mongodb://MongoLab-d:tsWFfWiQkrxfZhKZbNOBPVGp3culnVTN
   * @params [Object] room object
             [String] user's username to be removed 
   */
-  exitRoom: function(roomObj, userObj, callback){
+  exitRoom: function(roomObj, userObj){
     var userIndex = roomObj.users.indexOf(userObj.name);
-    roomObj.users.splice(userIndex, 1);
+    roomObj.splice(userIndex, 1);
   } //,
-  /**
-  *
-  *
-  */
   
 
  };
