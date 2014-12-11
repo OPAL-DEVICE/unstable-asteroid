@@ -48,12 +48,13 @@ mongoose.connect('mongodb://MongoLab-d:tsWFfWiQkrxfZhKZbNOBPVGp3culnVTNs5G7nyd1c
     });
   },
 
-  login: function(userName, userPassword, callback) {
+  login: function(userObject, callback) {
     var findUser = Q.nbind(User.find, User);
-    findUser({name: userName})
+    console.log("NOT BROKEN HERE");
+    findUser({name: userObject.name})
     .then(function(foundUser){
       if(foundUser.length !== 0) {
-        if(foundUser[0].password === userPassword){
+        if(foundUser[0].password === userObject.password){
           callback(true);
         }
         //wrong password

@@ -29,9 +29,14 @@ Socket.prototype.createRoom = function(roomName, userName){
 
 //sends user information to server. 
 Socket.prototype.userSignUp = function(username, password){
-  console.log("INSIDE CLIENT USERSIGNIN");
+  console.log("INSIDE CLIENT USERSIGNUP");
   this.connection.emit('user sign up', {name: username, password: password}); 
 }
+
+Socket.prototype.userLogIn = function(username, password){
+  console.log("inside client user login"); 
+  this.connection.emit('user login', {name: username, password: password}); 
+};
 
 //Sets callback for when 'all messages' event is recieved
 Socket.prototype.onAllMessages = function(callback){
@@ -41,14 +46,15 @@ Socket.prototype.onAllMessages = function(callback){
 };
 
 Socket.prototype.onRoomTaken = function(callback) {
-  this.connection.on('room taken'), function(truthy) {
-    console("TRIGGER ONROOMTAKEN");
+  this.connection.on('room taken', function(truthy) {
+    console.log("TRIGGER ONROOMTAKEN");
     callback(truthy);
-  }
+  });
 }
 
 Socket.prototype.onUserTaken = function(callback) {
   this.connection.on('user taken', function(truthy) {
+    console.log('INSIDE CLIENT ONUSERTAKEN');
     callback(truthy);
   })
 }
@@ -58,23 +64,32 @@ Socket.prototype.onWrongRoomPassword = function() {
 }
 
 Socket.prototype.onWrongUserPassword = function() {
+  this.connection.on('wrong user password', function(truthy){
+    callback(truthy); 
+  });
 
 }
 
-Socket.prototype.onCreatedUser = function() {
-
+Socket.prototype.onCreatedUser = function(callback) {
+  this.connection.on('created user', function(truthy) {
+    callback(truthy);
+  });
 }
 
-Socket.prototype.onCreatedRoom = function() {
-
+Socket.prototype.onCreatedRoom = function(callback) {
+  this.connection.on('created room', function(truthy) {
+    callback(truthy);
+  });
 }
 
 Socket.prototype.onEnteredRoom = function() {
 
 }
 
-Socket.prototype.onLoggedIn = function() {
-
+Socket.prototype.onLoggedIn = function(callback) {
+  this.connection.on('logged in', function(truthy){
+    callback(truthy); 
+  }); 
 }
 
 //Sends message with edit event
