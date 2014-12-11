@@ -21,14 +21,16 @@ Socket.prototype.sendDelete = function(message){
 
 //Sends/creates a roomname to server.
 Socket.prototype.createRoom = function(roomName, userName){
-  console.log("CREATED ROOM");
-  this.connection.emit('new room', roomName, userName); 
+  console.log("INSIDE CLIENT CREATEROOM");
+  var room = {name: roomName};
+  var user = {name: userName};
+  this.connection.emit('new room', room, user);
 }
 
 //sends user information to server. 
-Socket.prototype.userSignIn = function(username, password){
+Socket.prototype.userSignUp = function(username, password){
   console.log("INSIDE CLIENT USERSIGNIN");
-  this.connection.emit('user sign in', {name: username, password: password}); 
+  this.connection.emit('user sign up', {name: username, password: password}); 
 }
 
 //Sets callback for when 'all messages' event is recieved
@@ -39,13 +41,16 @@ Socket.prototype.onAllMessages = function(callback){
 };
 
 Socket.prototype.onRoomTaken = function(callback) {
-  this.connection.on('room taken'), function(trucey) {
-    callback(trucey);
+  this.connection.on('room taken'), function(truthy) {
+    console("TRIGGER ONROOMTAKEN");
+    callback(truthy);
   }
 }
 
-Socket.prototype.onUserTaken = function() {
-
+Socket.prototype.onUserTaken = function(callback) {
+  this.connection.on('user taken', function(truthy) {
+    callback(truthy);
+  })
 }
 
 Socket.prototype.onWrongRoomPassword = function() {

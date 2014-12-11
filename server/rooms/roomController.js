@@ -5,9 +5,6 @@ var Room  = require('./roomModel'),
     mongoose = require('mongoose');
 
 
-//connects global mongoose variable to online MongoDB DB
-mongoose.createConnection('mongodb://MongoLab-d:tsWFfWiQkrxfZhKZbNOBPVGp3culnVTNs5G7nyd1cbE-@ds050077.mongolab.com:50077/MongoLab-d');
-
 /**
  * helper functions that reference and modify messages in DB
  */
@@ -22,23 +19,27 @@ mongoose.createConnection('mongodb://MongoLab-d:tsWFfWiQkrxfZhKZbNOBPVGp3culnVTN
       name: roomObject.name,
       users: [userObject.name],
       messages: [],
-      password: '',
+      password: '', //MAKE PASSWORD HERE ROOMOBJECT.PASSWORD
       createdBy: userObject.name
    };
     console.log("INSIDE ADDNEWROOM");
     //creates promises of query functions
     var createRoom = Q.nbind(Room.create, Room);
     var findRoom = Q.nbind(Room.find, Room);
+    console.log(JSON.stringify(findRoom()));
 
     //check if room already exists
-    findRoom({ name: newRoom.name})
+    findRoom({ name: newRoom.name })
       .then(function(foundRoom){
-        if(foundRoom.length !== 0) {
+        console.log(foundRoom.length);
+        if(foundRoom.length === 0) {
           //creates and saves the room to the DB
           createRoom(newRoom)
-          .then(function(createdRoom) {
-            return createdRoom;
-          }); 
+            .then(function(createdRoom) {
+              console.log("NOT BROKEN HERE");
+              callback(false);
+              return createdRoom;
+          });
         }
         else {
           callback(true);

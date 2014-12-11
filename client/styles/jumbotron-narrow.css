@@ -77,3 +77,21 @@ body {
     border-bottom: 0;
   }
 }
+
+/**** Non-jumbotron CSS ****/
+
+.hidden {
+  display: none;
+}
+
+#roomError {
+  margin-top: 20px;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  width: 68%;
+  border-radius: 5px;
+  border: solid 1px red;
+}
+
+
+
