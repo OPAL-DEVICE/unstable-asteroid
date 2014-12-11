@@ -55,7 +55,7 @@ io.on('connection', function(socket) {
     messageController.addFileToMessage(msg, function(){
       sendFullMessageTree();
     });
-  })
+  });
 
   //send all current messages to all users after a message has been removed
   socket.on('remove message leaf',function(msg){
