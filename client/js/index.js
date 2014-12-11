@@ -11,6 +11,9 @@ $(document).ready(function(){
 
   	username = $('#signUpUsername').val();
   	var password = $('#signUpPassword').val();
+    $('#signUpUsername').val('');
+    $('#signUpPassword').val('');
+
     console.log(username);
 
   	socket.userSignUp(username, password);
@@ -18,35 +21,44 @@ $(document).ready(function(){
 
   socket.onCreatedUser(function(truthy) {
     if (truthy) {
+      $('#navSignUp, #navLogIn').addClass('hidden'); 
+      $('#navSignOut').removeClass('hidden');
       $('#signUpModal').modal('toggle');
     }
-  })
+  });
 
   $('#logInButton').on('click', function(e){
     e.preventDefault(); 
     username = $('#logInUsername').val(); //should use userObj. 
     var password = $('#logInPassword').val();
 
-    socket.userLogIn(username, password); 
-  })
+    socket.userLogIn(username, password);
+  });
   
-  socket.onLoggedIn(function(truthy){
-    if(truthy){
-      $('#navSignUp').addClass("hidden"); 
-      $('#navLogIn').addClass("hidden"); 
-      $('#navBarUl').append("<li role='presentation'><a href='#' >Sign out</a></li>"); 
+  socket.onLoggedIn(function(roomsObject){
+    if(roomsObject) {
+      $('#navSignUp, #navLogIn').addClass('hidden'); 
+      $('#navSignOut').removeClass('hidden'); 
       $('#logInModal').modal('toggle');
-
+      for (var key in roomsObject) {
+        
+      }
     }
-  })
-
+  });
 
   socket.onUserTaken(function(truthy) {
     if (truthy) {
       $('#signUpModalForm').addClass('has-error');
       $('#signUpError').removeClass('hidden');
     }
-  })
+  });
+
+  socket.onWrongUserPassword(function(truthy) {
+    if (truthy) {
+      $('#logInModalForm').addClass('has-error');
+      $('#logInError').removeClass('hidden');
+    }
+  });
 
   $('#addRoomBtn').on('click', function(e){
     e.preventDefault();
@@ -72,7 +84,12 @@ $(document).ready(function(){
   	}
   });
 
-
+  $('.close').on('click', function() {
+    $('#logInModalForm').removeClass('has-error');
+    $('#logInError').addClass('hidden');
+    $('#signUpModalForm').removeClass('has-error');
+    $('#signUpError').addClass('hidden');
+  });
 
 }); 
 
