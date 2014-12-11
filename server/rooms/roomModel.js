@@ -6,7 +6,7 @@ var mongoose = require('mongoose');
 //unqiue _id created by default
 var RoomSchema = new mongoose.Schema({
   name: String,
-  users: [String],
+  users: { type : Array , "default" : [] },
   messages: { type : Array , "default" : [] },
   password: String,
   createdBy: String

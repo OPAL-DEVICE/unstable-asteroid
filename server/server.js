@@ -88,7 +88,7 @@ io.on('connection', function(socket) {
 
   /* User socket stuff */
   //Sign-up
-  socket.on('user sign in',function(userObj){
+  socket.on('user sign up',function(userObj){
     console.log("INSIDE USER SIGN IN SOCKET", userObj);
     userController.addNewUser(userObj,function(isTaken){
       console.log('addNewUser');
@@ -98,6 +98,7 @@ io.on('connection', function(socket) {
         socket.emit('user taken', true);
       }
       else {
+        console.log('CREATED NEW USER');
         socket.emit('created user', userObj);
       }
     });

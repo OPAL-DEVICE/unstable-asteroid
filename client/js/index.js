@@ -9,10 +9,8 @@ $(document).ready(function(){
   	e.preventDefault(); 
     var roomName = $('#roomInputName').val(); 
    	$('.RoomList').append('<li>'+roomName+'</li>');
-    $('roomInputName').val('');
-
+    $('#roomInputName').val('');
    	socket.createRoom(roomName, username); 
-
   });
 
   //On login click, send username and password
@@ -23,7 +21,7 @@ $(document).ready(function(){
   	var password = $('#password').val();
     console.log(username);
 
-  	socket.userSignIn(username, password);
+  	socket.userSignUp(username, password);
   });
 
   //Set listener
