@@ -12,20 +12,20 @@ var Room  = require('./roomModel'),
  module.exports = {
   /**
   * create and store room object
-  * @params [Function] callback to be called after successful retrieval
+  * @params [Object] room object to imitate data to be stored
+            [Object] user object to retrieve username
+            [Function] callback to be called after successful retrieval
   */
   addNewRoom: function(roomObject, userObject, callback) { 
    var newRoom = {
       name: roomObject.name,
       users: [userObject.name],
-      messages: [],
-      password: roomObject.password, //MAKE PASSWORD HERE ROOMOBJECT.PASSWORD
+      password: roomObject.password, 
       createdBy: userObject.name,
       sessionId: ''
 
    };
-   console.log("NEW ROOM IN SERVER", newRoom);
-    //creates promises of query functions
+
     var createRoom = Q.nbind(Room.create, Room);
     var findRoom = Q.nbind(Room.find, Room);
     console.log(JSON.stringify(findRoom()));
@@ -53,16 +53,12 @@ var Room  = require('./roomModel'),
   },
 
   /**
-  * enter room when given room name
-  * @params [Function] callback to be called after successful retrieval
-  */
-  /**
-  * room authentication
-  * @params [Function] callback to be called after successful retrieval
-  */
-  /**
-  * create and store room object. if password is null, public room
-  * @params [Function] callback to be called after successful retrieval
+  * enter room if roomName and roomPassword match with database
+  * places user in room
+  * @params [String] name of room
+            [String] password of room
+            [Object] user object to retrieve username to be placed in room
+            [Function] callback to be called after successful retrieval
   */
   //PUBLIC: User not prompted for password, so this will be expecting an empty string
   //PRIVATE: User prompted for password
@@ -94,14 +90,10 @@ var Room  = require('./roomModel'),
   }, 
 
   /**
-  * adds people to room when join
-  * @params [Function] callback to be called after successful retrieval
-  */
-
-  /**
   * Removes user from room
   * @params [Object] room object
-  *         [String] user's username to be removed 
+            [String] user's username to be removed 
+            [Function] callback to be called after successful retrieval
   */
   exitRoom: function(roomObj, userName, callback){
     var findRoom = Q.nbind(Room.findOne, Room);
@@ -116,7 +108,10 @@ var Room  = require('./roomModel'),
       });
 
   },
-
+  /**
+  * Returns array of all rooms
+  * @params [Function] callback to be called after successful retrieval
+  */
   getAllRooms: function(callback){
     var findRooms = Q.nbind(Room.find, Room);
     findRooms({})
