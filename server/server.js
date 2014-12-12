@@ -11,7 +11,7 @@ var clearURL = '/storm.html/clear';
 //serve static files
 app.use(express.static(__dirname + '/../client') );
 app.use(express.static(__dirname + '/../client/styles') );
-app.use('/docs', express.static(__dirname + '/../docs')  )
+app.use('/docs', express.static(__dirname + '/../docs')  );
 
 //redirect blank url to index.html
 app.get('/', function(req, res) {
@@ -93,6 +93,12 @@ io.on('connection', function(socket) {
       }
     });
   });
+  //Exit
+  socket.on('exit room', function(roomObj, userName){
+    roomController.exitRoom(roomObj, userName, function(room){
+      socket.emit('exited room', room);
+    });
+  }); 
 
   /* User socket stuff */
   //Sign-up
@@ -114,7 +120,7 @@ io.on('connection', function(socket) {
     userController.login(userObj, function(isAuthentic){
       if(isAuthentic) {
         roomController.getAllRooms(function(rooms){
-          console.log("USER LOGGED IN", rooms)
+          console.log("USER LOGGED IN", rooms);
           socket.emit('logged in', rooms);
         });
       }
