@@ -20,16 +20,16 @@ Socket.prototype.sendDelete = function(message){
 };
 
 //Sends/creates a roomname to server.
-Socket.prototype.createRoom = function(roomName, userName){
+Socket.prototype.createRoom = function(roomName, roomPassword, userName){
   console.log("INSIDE CLIENT CREATEROOM");
-  var room = {name: roomName};
+  var room = {name: roomName, password: roomPassword};
   var user = {name: userName};
   this.connection.emit('new room', room, user);
 }
 
 //sends user information to server. 
 Socket.prototype.userSignUp = function(username, password){
-  console.log("INSIDE CLIENT USERSIGNUP");
+  console.log("INSIDE CLIENT USER SIGNUP");
   this.connection.emit('user sign up', {name: username, password: password}); 
 }
 
@@ -37,6 +37,11 @@ Socket.prototype.userLogIn = function(username, password){
   console.log("inside client user login"); 
   this.connection.emit('user login', {name: username, password: password}); 
 };
+
+Socket.prototype.enterRoom = function(roomName, password, userName) {
+  console.log("INSIDE CLIENT ENTER ROOM");
+  this.connection.emit('enter room', roomName, password, {username: userName});
+}
 
 //Sets callback for when 'all messages' event is recieved
 Socket.prototype.onAllMessages = function(callback){
@@ -47,27 +52,30 @@ Socket.prototype.onAllMessages = function(callback){
 
 Socket.prototype.onRoomTaken = function(callback) {
   this.connection.on('room taken', function(truthy) {
-    console.log("TRIGGER ONROOMTAKEN");
+    console.log("TRIGGER ON ROOM TAKEN");
     callback(truthy);
   });
 }
 
 Socket.prototype.onUserTaken = function(callback) {
   this.connection.on('user taken', function(truthy) {
-    console.log('INSIDE CLIENT ONUSERTAKEN');
+    console.log('INSIDE CLIENT ON USER TAKEN');
     callback(truthy);
   })
 }
 
-Socket.prototype.onWrongRoomPassword = function() {
-
+Socket.prototype.onWrongRoomPassword = function(callback) {
+  this.connection.on('wrong room password', function(truthy) {
+    console.log("INSIDE CLIENT WRONG ROOM PASSWORD");
+    callback(truthy);
+  })
 }
 
-Socket.prototype.onWrongUserPassword = function() {
+Socket.prototype.onWrongUserPassword = function(callback) {
   this.connection.on('wrong user password', function(truthy){
-    callback(truthy); 
+    console.log("INSIDE CLIENT WRONG USER PASSWORD");
+    callback(truthy);
   });
-
 }
 
 Socket.prototype.onCreatedUser = function(callback) {
@@ -82,17 +90,9 @@ Socket.prototype.onCreatedRoom = function(callback) {
   });
 }
 
-Socket.prototype.onEnteredRoom = function() {
-
-}
-
 Socket.prototype.onLoggedIn = function(callback) {
   this.connection.on('logged in', function(truthy){
-    callback(truthy); 
-  }); 
+    callback(truthy);
+  });
 }
 
-//Sends message with edit event
-Socket.prototype.sendRoom = function(message){
-  this.connection.emit('new room', message);
-};
