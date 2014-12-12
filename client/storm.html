@@ -7,8 +7,6 @@
   </head>
   <body>
     <div class='area d3box'></div>
-    <div id="subscribers"></div>
-    <button class='startVidSession' type="submit" onclick='startVidSession()'>start video</button>
     <div class='controls'>
       <div class='bar'>
         <!-- <div class="toggle"></div> -->
@@ -17,7 +15,59 @@
           <input class='btn edit' type='edit' value='Edit Idea'/>
           <input class='btn send' type="submit" value="Add Idea" />
         </form>
+        <div id="subscribers">videos will enter here</div>
+        <button class='startVidSession' type="submit" onclick='startVidSession()'>start video</button>
         <button class='btn remove' hidden='hidden'>Remove</button>
+
+    <script>
+    var startVidSession = function(sessionId, token) {
+      console.log(sessionId, token);
+      // Initialize API key, session, and token...
+      // Think of a session as a room, and a token as the key to get in to the room
+      // Sessions and tokens are generated on your server and passed down to the client
+      var apiKey = "45105222";
+      var sessionId = "2_MX40NTEwNTIyMn5-MTQxODI0MDg1Mjg3MX5RdSswRitmNEEzajc2QnIvOHl0WU4vSGN-fg";
+      var token = "T1==cGFydG5lcl9pZD00NTEwNTIyMiZzaWc9MjNlZWY4NGQ1Nzg5NTIzZDhjNmQxOTg4NTA4ZmRlMzdhMzU0YjFiZjpyb2xlPXB1Ymxpc2hlciZzZXNzaW9uX2lkPTJfTVg0ME5URXdOVEl5TW41LU1UUXhPREkwTURnMU1qZzNNWDVSZFNzd1JpdG1ORUV6YWpjMlFuSXZPSGwwV1U0dlNHTi1mZyZjcmVhdGVfdGltZT0xNDE4MzQ3MzI4Jm5vbmNlPTAuNzM2MDQzODM2NzY5Nzc4NyZleHBpcmVfdGltZT0xNDIwOTM5Mjg2";
+      // var sessionId = sessionId;
+      // var token = token;
+
+      var session = OT.initSession(sessionId);
+      var publisher = OT.initPublisher(apiKey, 'publisher');
+      session.addEventListener("sessionConnected", sessionConnectHandler);
+
+      function sessionConnectHandler(event) {
+          publisher = OT.initPublisher(45105222, 'subscribers');
+          console.log('sesioncon');
+                             // This assumes that there is a DOM element with the ID 'publisher'.
+          session.publish(publisher);
+      }
+
+      session.on({
+        //when session.connect() asynchronously completes
+        sessionConnected: function(event) {
+          console.log('hi');
+          // Publish the publisher: triggers 'streamCreated' on other clients
+          session.publish(publisher, function() {
+            console.log('asdf');
+          });
+        },
+
+        // runs when another client publishes a stream: when session.publish() is called
+        streamCreated: function(event) {
+          console.log('streamCreated');
+          var subContainer = document.createElement('div');
+          subContainer.id = 'stream id: ' + event.stream.streamId;
+          console.log(subContainer.id);
+          document.getElementById('subscribers').appendChild(subContainer);
+
+          session.subscribe(event.stream, subContainer);
+        }
+      });
+      // Connect to the Session using the 'apiKey' of the application and a 'token' for permission
+      session.connect(apiKey, token);
+    };
+
+    </script>
       </div>
     </div>
   </body>

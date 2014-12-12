@@ -109,7 +109,7 @@ io.on('connection', function(socket) {
                 console.log("error creating a session: " + error);
               } else {
                 sessionId = session.sessionId;
-                roomController.addSession(roomName, sessi`onId, function(isSaved) {
+                roomController.addSession(roomName, sessionId, function(isSaved) {
                   if (isSaved) {
                     console.log('saved');
                   }
