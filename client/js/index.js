@@ -2,24 +2,18 @@
 $(document).ready(function(){
 
 	var socket = new Socket();
-  var username;
-  var roomName;
-  var roomNameSelected;
+  var username, roomName, roomNameSelected;
+
+////////////// SIGNING UP //////////////
 
   //On signup click, send username and password
   $('#signUpButton').on('click', function(e) {
   	e.preventDefault();
-
   	username = $('#signUpUsername').val();
   	var password = $('#signUpPassword').val();
-
     $('#signUpUsername').val('');
     $('#signUpPassword').val('');
-
-    console.log(username);
-
     socket.userSignUp(username, password);
-
     $('#signUpUsername').val('');
     $('#signUpPassword').val('');
   });
@@ -35,19 +29,22 @@ $(document).ready(function(){
       }
     }
   });
+//////////////////////////////////////////
+
+////////////// LOGGING IN //////////////
 
   //On log in click ,send username and password to server.js
   $('#logInButton').on('click', function(e){
     e.preventDefault(); 
     username = $('#logInUsername').val(); //should use userObj. 
-    var password = $('#logInUsername').val();
-
+    var password = $('#logInPassword').val();
+    console.log("CLIENT PASSWORD", password);
     socket.userLogIn(username, password);
-
     $('#logInUsername').val('');
-    $('#logInUsername').val('');
+    $('#logInPassword').val('');
   });
   
+  //On logging in, does same thing as signing up
   socket.onLoggedIn(function(roomsObject){
     if(roomsObject) {
       $('#navSignUp, #navLogIn').addClass('hidden'); 
@@ -58,7 +55,11 @@ $(document).ready(function(){
       }
     }
   });
+//////////////////////////////////////////
 
+////////////// ERRORS //////////////
+
+  //All of the following highlights the input with red and shows error message
   socket.onUserTaken(function(truthy) {
     if (truthy) {
       $('#signUpModalForm').addClass('has-error');
@@ -73,6 +74,22 @@ $(document).ready(function(){
     }
   });
 
+  socket.onRoomTaken(function(truthy) {
+  	if (truthy) {
+  		$('#roomForm').addClass('has-error');
+      $('#roomError').removeClass('hidden');
+    }
+  });
+
+  socket.onWrongRoomPassword(function(truthy) {
+    $('#selectedRoomModalForm').addClass('has-error');
+    $('#selectedRoomError').removeClass('hidden');
+  });
+//////////////////////////////////////////
+
+////////////// ROOMS //////////////
+
+  //On addRoomBtn, sends roomname, password, and username to server.js
   $('#addRoomBtn').on('click', function(e){
     e.preventDefault();
     roomName = $('#roomInputName').val();
@@ -84,7 +101,7 @@ $(document).ready(function(){
     $('#roomPassword').val('');
   }); 
 
-  //on Button click, send the roomName over Sockets!
+  //On creating a room, appends the room to the room list (can't be done without having logged in or signed up)
   socket.onCreatedRoom(function(truthy) {
     if (truthy) {
       $('.RoomList').append("<li class='room' data-toggle='modal' data-target='#selectedRoomModal'>"+ roomName +"</li>");
@@ -93,29 +110,29 @@ $(document).ready(function(){
     }
   });
 
-  //Set listener
-  socket.onRoomTaken(function(truthy) {
-  	if (truthy) {
-  		$('#roomForm').addClass('has-error');
-      $('#roomError').removeClass('hidden');
-  	}
-  });
-
+  //Selects room
   $(document).on('click', '.room', function(){
     roomNameSelected = $(this).text();
   });
 
+  //Sends room name, room password, and username to server.js
   $('#selectedRoomButton').on('click', function() {
-    var password = $('#selectedRoomPassword').val();
-    socket.enterRoom(roomNameSelected, password, username);
+    var roomPassword = $('#selectedRoomPassword').val();
+    socket.enterRoom(roomNameSelected, roomPassword, username);
     $('#selectedRoomPassword').val('');
   });
+//////////////////////////////////////////
 
-  socket.onWrongRoomPassword(function(truthy) {
-    $('#selectedRoomModalForm').addClass('has-error');
-    $('#selectedRoomError').removeClass('hidden');
+
+////////////// SIGN OUT //////////////
+  $(document).on('click', '#navSignOut', function() {
+    $('#navSignUp, #navLogIn').removeClass('hidden');
+    $('#navSignOut').addClass('hidden');
+    $('.room').remove();
   });
+//////////////////////////////////////////
 
+////////////// MISC //////////////
   $('.close').on('click', function() {
     $('#logInModalForm').removeClass('has-error');
     $('#logInError').addClass('hidden');
@@ -131,5 +148,6 @@ $(document).ready(function(){
     window.location.href="http://localhost:8000/storm.html";
   });
 
-}); 
 
+}); 
+//////////////////////////////////////////
