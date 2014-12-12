@@ -4,6 +4,8 @@
     <link href="bower_components/bootstrap/dist/css/bootstrap.css" rel="stylesheet">
   	<link rel="stylesheet" type="text/css" href="styles/styles.css">
     <link rel="icon" type="image/png" href="stormSmall.png" />
+  <script src='http://static.opentok.com/webrtc/v2.2/js/opentok.min.js'></script>  
+
   </head>
   <body>
     <div class='area d3box'></div>
@@ -30,48 +32,65 @@
       var token = "T1==cGFydG5lcl9pZD00NTEwNTIyMiZzaWc9MjNlZWY4NGQ1Nzg5NTIzZDhjNmQxOTg4NTA4ZmRlMzdhMzU0YjFiZjpyb2xlPXB1Ymxpc2hlciZzZXNzaW9uX2lkPTJfTVg0ME5URXdOVEl5TW41LU1UUXhPREkwTURnMU1qZzNNWDVSZFNzd1JpdG1ORUV6YWpjMlFuSXZPSGwwV1U0dlNHTi1mZyZjcmVhdGVfdGltZT0xNDE4MzQ3MzI4Jm5vbmNlPTAuNzM2MDQzODM2NzY5Nzc4NyZleHBpcmVfdGltZT0xNDIwOTM5Mjg2";
       // var sessionId = sessionId;
       // var token = token;
-
       var session = OT.initSession(sessionId);
-      var publisher = OT.initPublisher(apiKey, 'publisher');
-      session.addEventListener("sessionConnected", sessionConnectHandler);
+      var targetElement = 'publisherContainer';
+      
+      // Connect to the Session using the 'apiKey' of the application and a 'token' for permission
+      session.connect(apiKey, token);
 
-      function sessionConnectHandler(event) {
-          publisher = OT.initPublisher(45105222, 'subscribers');
-          console.log('sesioncon');
-                             // This assumes that there is a DOM element with the ID 'publisher'.
-          session.publish(publisher);
-      }
-
+      // var publisher = OT.initPublisher(apiKey, 'publisher');
       session.on({
         //when session.connect() asynchronously completes
         sessionConnected: function(event) {
-          console.log('hi');
+          console.log(event.stream);
+          //initializes publisher vid stream and where it would be inputted
+          var publisherProperties = {insertMode: "append"};
+          var publisher = OT.initPublisher(apiKey, 'subscribers', publisherProperties, function (error) {
+            if (error) {
+              console.log(error);
+            } else {
+              console.log("Publisher initialized");
+              //publisher doesn't call streamCreated
+              // session.publish(publisher, function() {
+              //   console.log('does this get called');
+              // });
+            }
+          })
+          .on("streamCreated", function(event) {
+            console.log('streamCreated in publisher');
+            var vidContainer = document.createElement('div');
+            vidContainer.id = 'stream id: ' + event.stream.streamId;
+            console.log('publisher: ' + vidContainer.id);
+            document.getElementById('subscribers').appendChild(vidContainer);
+
+          });
+          // var publisher = session.publish(targetElement)
+            
+
           // Publish the publisher: triggers 'streamCreated' on other clients
           session.publish(publisher, function() {
-            console.log('asdf');
+            console.log('does this get called');
           });
         },
-
         // runs when another client publishes a stream: when session.publish() is called
         streamCreated: function(event) {
           console.log('streamCreated');
-          var subContainer = document.createElement('div');
-          subContainer.id = 'stream id: ' + event.stream.streamId;
-          console.log(subContainer.id);
-          document.getElementById('subscribers').appendChild(subContainer);
-
-          session.subscribe(event.stream, subContainer);
+          console.log(event.stream);
+          var vidContainer = document.createElement('div');
+          vidContainer.id = 'stream id: ' + event.stream.streamId;
+          console.log(vidContainer.id);
+          document.getElementById('subscribers').appendChild(vidContainer);
+          session.subscribe(event.stream, vidContainer);
         }
       });
-      // Connect to the Session using the 'apiKey' of the application and a 'token' for permission
-      session.connect(apiKey, token);
+      // // Connect to the Session using the 'apiKey' of the application and a 'token' for permission
+      // session.connect(apiKey, token);
     };
 
     </script>
       </div>
     </div>
   </body>
-  <script src='http://static.opentok.com/webrtc/v2.2/js/opentok.min.js'></script>  
   <script src="http://d3js.org/d3.v3.min.js"></script>
   <script src="bower_components/jquery/dist/jquery.min.js"></script>
   <script src="bower_components/bootstrap/dist/js/bootstrap.min.js"></script>

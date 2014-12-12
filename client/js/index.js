@@ -30,7 +30,7 @@ $(document).ready(function(){
       $('#navSignOut').removeClass('hidden');
       $('#signUpModal').modal('toggle');
       for (var i = 0; i < roomsObject.length; i++) {
-        $('.RoomList').append("<li class='room' data-toggle='modal' data-target='#signUpModal'>"+ roomsObject[i].name +"</li>");
+        $('.RoomList').append("<li class='room' data-toggle='modal' data-target='#selectedRoomModal'>"+ roomsObject[i].name +"</li>");
       }
     }
   });

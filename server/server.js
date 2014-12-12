@@ -94,6 +94,7 @@ io.on('connection', function(socket) {
   });
   //Enter room
   socket.on('enter room', function(roomName, roomPass, userObj){
+    console.log('IN ENTER ROOM');
     roomController.enterRoom(roomName, roomPass, userObj, function(isAuthentic, roomObj){
       if(isAuthentic) {
         sendFullMessageTree(roomObj);

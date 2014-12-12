@@ -118,7 +118,6 @@ module.exports = {
         callback();
       }
     });
-
   },
 
   /**
