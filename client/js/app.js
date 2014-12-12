@@ -19,7 +19,6 @@ var disallowRemoval = function(data){
 $(document).ready(function(){
 
 
-
   $('.btn.remove').hide();
 
   //Make connection 
