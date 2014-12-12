@@ -82,6 +82,8 @@ function update() {
       .attr("transform", transform)
       //Register click event on overall element so text or circle can be clicked to select node
       .on("click", click)
+      .on("dblclick", dblclick)
+      .call(drag);
 
   // Add circle inside g element 
   g.attr("class", "node")
@@ -214,3 +216,14 @@ function flatten(roots) {
   return nodes;
 }
 
+function dblclick(d) {
+  d3.select(this).classed("fixed", d.fixed = false);
+}
+
+function dragstart(d) {
+  d3.select(this).classed("fixed", d.fixed = true);
+}
+
+
+var drag = force.drag()
+    .on("dragstart", dragstart);
