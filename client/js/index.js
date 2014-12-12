@@ -13,6 +13,11 @@ $(document).ready(function(){
   	username = $('#signUpUsername').val();
   	var password = $('#signUpPassword').val();
 
+    $('#signUpUsername').val('');
+    $('#signUpPassword').val('');
+
+    console.log(username);
+
     socket.userSignUp(username, password);
 
     $('#signUpUsername').val('');
