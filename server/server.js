@@ -128,7 +128,7 @@ io.on('connection', function(socket) {
 
               var tokenOptions = {};
                   tokenOptions.role = "publisher";
-              // Generate a token.
+              // Generate a token for client 
               token = opentok.generateToken(sessionId, tokenOptions);
               console.log(token);
 

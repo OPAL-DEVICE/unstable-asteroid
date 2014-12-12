@@ -50,34 +50,37 @@
               console.log(error);
             } else {
               console.log("Publisher initialized");
+              
               //publisher doesn't call streamCreated
               // session.publish(publisher, function() {
               //   console.log('does this get called');
               // });
             }
+            session.publish(publisher, function() {
+              console.log('publishing session');
+            });
           })
           .on("streamCreated", function(event) {
             console.log('streamCreated in publisher');
             var vidContainer = document.createElement('div');
             vidContainer.id = 'stream id: ' + event.stream.streamId;
-            console.log('publisher: ' + vidContainer.id);
+            console.log('publisher id: ' + vidContainer.id);
             document.getElementById('subscribers').appendChild(vidContainer);
 
           });
           // var publisher = session.publish(targetElement)
             
-
           // Publish the publisher: triggers 'streamCreated' on other clients
-          session.publish(publisher, function() {
-            console.log('does this get called');
-          });
+          // session.publish(publisher, function() {
+          //   console.log('publishing session');
+          // });
         },
         // runs when another client publishes a stream: when session.publish() is called
         streamCreated: function(event) {
           console.log('streamCreated');
           console.log(event.stream);
           var vidContainer = document.createElement('div');
-          vidContainer.id = 'stream id: ' + event.stream.streamId;
+          vidContainer.id = 'client stream id: ' + event.stream.streamId;
           console.log(vidContainer.id);
           document.getElementById('subscribers').appendChild(vidContainer);
           session.subscribe(event.stream, vidContainer);
