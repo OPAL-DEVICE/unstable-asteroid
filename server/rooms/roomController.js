@@ -91,7 +91,7 @@ var Room  = require('./roomModel'),
       .fail(function(err, data) {
         console.error('Inappropriate input', err);
       });
-  },
+  }, 
 
   /**
   * adds people to room when join
