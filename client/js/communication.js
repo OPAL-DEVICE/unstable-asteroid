@@ -38,6 +38,11 @@ Socket.prototype.userLogIn = function(username, password){
   this.connection.emit('user login', {name: username, password: password}); 
 };
 
+//sends room info to authenticate
+Socket.prototype.enterRoom = function(roomName, roomPass, userObj) {
+  this.connection.emit('enter room', roomName, roomPass, userObj);
+}
+
 //Sets callback for when 'all messages' event is recieved
 Socket.prototype.onAllMessages = function(callback){
   this.connection.on('all messages', function(messageReceived){
@@ -82,9 +87,20 @@ Socket.prototype.onCreatedRoom = function(callback) {
   });
 }
 
-Socket.prototype.onEnteredRoom = function() {
-
+//from server. actual method calls on app.js
+Socket.prototype.onEnteredRoom = function(callback) {
+  this.connection.on('entered room', function(sessionId, token) {
+    callback(sessionId, token);
+  });
 }
+
+//Sets callback for when 'all messages' event is recieved
+Socket.prototype.onAllMessages = function(callback){
+  this.connection.on('all messages', function(messageReceived){
+    callback(messageReceived);
+  });
+};
+
 
 Socket.prototype.onLoggedIn = function(callback) {
   this.connection.on('logged in', function(truthy){
