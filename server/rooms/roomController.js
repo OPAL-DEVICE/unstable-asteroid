@@ -19,8 +19,9 @@ var Room  = require('./roomModel'),
       name: roomObject.name,
       users: [userObject.name],
       messages: [],
-      password: '', //MAKE PASSWORD HERE ROOMOBJECT.PASSWORD
-      createdBy: userObject.name
+      password: roomObject.password, //MAKE PASSWORD HERE ROOMOBJECT.PASSWORD
+      createdBy: userObject.name,
+      sessionId: ''
    };
     //creates promises of query functions
     var createRoom = Q.nbind(Room.create, Room);
@@ -69,7 +70,7 @@ var Room  = require('./roomModel'),
       .then(function(foundRoom){
         if(foundRoom.length !== 0) {
           if(foundRoom[0].password === roomPassword){
-            foundRoom[0].users.push(userObj.username)
+            foundRoom[0].users.push(userObj.username);
             callback(true, foundRoom[0]);
           }
           //wrong password
@@ -96,9 +97,18 @@ var Room  = require('./roomModel'),
   * @params [Object] room object
             [String] user's username to be removed 
   */
-  exitRoom: function(roomObj, userObj){
-    var userIndex = roomObj.users.indexOf(userObj.name);
-    roomObj.splice(userIndex, 1);
+  exitRoom: function(roomObj, userName, callback){
+    var findRoom = Q.nbind(Room.findOne, Room);
+    findRoom({_id: roomObj._id})
+      .then(function(room){
+        var userIndex = room.users.indexOf(userName);
+        room.splice(userIndex, 1);
+        callback(room);
+      })
+      .fail(function(err, data){
+        console.error("Exit Room failed: ", err);
+      });
+
   },
 
   getAllRooms: function(callback){
@@ -110,7 +120,38 @@ var Room  = require('./roomModel'),
       .fail(function(err, data){
         console.error("getAllRooms failed: ", err);
       });
-  } //,
-  
+  },
+  /**
+  * returns session id of room for video chat, empty string if none
+  * @params [String]    roomName to be searched for
+            [Function]  callback to be called after successful retrieval
+  */
+  getSessionId: function(roomName, callback){
+    var findRoom = Q.nbind(Room.findOne, Room);
+    findRoom({name: roomName})
+      .then(function(room){
+        callback(room.sessionId);
+      })
+      .fail(function(err, data){
+        console.error("getSessionId failed: ", err);
+      });
+  },
+  /**
+  * returns session id of room for video chat, empty string if none
+  * @params [String]    roomName to be searched for
+            [String]    sessionId to be added
+            [Function]  callback to be called after successful retrieval
+  */
+  addSession: function(roomName, sessionId, callback){
+    var findRoom = Q.nbind(Room.findOne, Room);
+    findRoom({name: roomName})
+      .then(function(room){
+        room.sessionId = sessionId;
+        callback(true);
+      })
+      .fail(function(){
+        callback(false);
+      });
+  }//,
 
  };

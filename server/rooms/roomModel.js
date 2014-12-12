@@ -9,7 +9,8 @@ var RoomSchema = new mongoose.Schema({
   users: { type : Array , "default" : [] },
   messages: { type : Array , "default" : [] },
   password: String,
-  createdBy: String
+  createdBy: String,
+  sessionId: String
 });
 
 module.exports = mongoose.model('Room', RoomSchema);
