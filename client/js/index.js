@@ -6,7 +6,7 @@ $(document).ready(function(){
   var roomName;
   var roomNameSelected;
 
-  //On login click, send username and password
+  //On signup click, send username and password
   $('#signUpButton').on('click', function(e) {
   	e.preventDefault();
 
@@ -24,17 +24,19 @@ $(document).ready(function(){
     $('#signUpPassword').val('');
   });
 
+  //On creating a user, hide the sign up and log in button, display sign out, and show room
   socket.onCreatedUser(function(roomsObject) {
     if (roomsObject) {
       $('#navSignUp, #navLogIn').addClass('hidden');
       $('#navSignOut').removeClass('hidden');
       $('#signUpModal').modal('toggle');
       for (var i = 0; i < roomsObject.length; i++) {
-        $('.RoomList').append("<li class='room' data-toggle='modal' data-target='#signUpModal'>"+ roomsObject[i].name +"</li>");
+        $('.RoomList').append("<li class='room' data-toggle='modal' data-target='#selectedRoomModal'>"+ roomsObject[i].name +"</li>");
       }
     }
   });
 
+  //On log in click ,send username and password to server.js
   $('#logInButton').on('click', function(e){
     e.preventDefault(); 
     username = $('#logInUsername').val(); //should use userObj. 
@@ -109,11 +111,18 @@ $(document).ready(function(){
     $('#selectedRoomPassword').val('');
   });
 
+  socket.onWrongRoomPassword(function(truthy) {
+    $('#selectedRoomModalForm').addClass('has-error');
+    $('#selectedRoomError').removeClass('hidden');
+  });
+
   $('.close').on('click', function() {
     $('#logInModalForm').removeClass('has-error');
     $('#logInError').addClass('hidden');
     $('#signUpModalForm').removeClass('has-error');
     $('#signUpError').addClass('hidden');
+    $('#selectedRoomModalForm').removeClass('has-error');
+    $('#selectedRoomError').addClass('hidden');
   });
 
   socket.onEnteredRoom(function(roomObj){
@@ -121,5 +130,6 @@ $(document).ready(function(){
     socket.redirectToRoom(roomObj);
     window.location.href="http://localhost:8000/storm.html";
   });
+
 }); 
 

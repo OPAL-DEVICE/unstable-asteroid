@@ -93,7 +93,7 @@ body {
   border: solid 1px red;
 }
 
-#signUpError, #logInError {
+#signUpError, #logInError, #selectedRoomError {
   margin-top: 20px;
   margin-left: 20px;
   padding: 5px 5px 5px 5px;

@@ -114,3 +114,4 @@ Socket.prototype.onRedirectToRoom = function(callback) {
     callback(roomObj);
   });
 }
+
