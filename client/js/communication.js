@@ -41,6 +41,7 @@ Socket.prototype.userLogIn = function(username, password){
 Socket.prototype.enterRoom = function(roomName, password, userName) {
   console.log("INSIDE CLIENT ENTER ROOM");
   this.connection.emit('enter room', roomName, password, {username: userName});
+};
 
 //Sets callback for when 'all messages' event is recieved
 Socket.prototype.onAllMessages = function(callback){

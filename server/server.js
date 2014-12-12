@@ -203,6 +203,7 @@ io.on('connection', function(socket) {
           console.log("USER LOGGED IN", rooms);
           socket.emit('logged in', rooms);
         });
+
       }
       else {
         socket.emit('wrong user password', true);
