@@ -8,7 +8,7 @@
     <meta name="author" content="">
     <link rel="icon" href="../../favicon.ico">
 
-    <title>Narrow Jumbotron Template for Bootstrap</title>
+    <title>Pondr - A Powerful Group Brainstorming and Communication Tool</title>
 
     <!-- Bootstrap core CSS -->
     <link href="bower_components/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -35,13 +35,14 @@
     <div class="container">
       <div class="header">
         <nav>
-          <ul id="navBarUl" class="nav nav-pills pull-right">
+          <ul class="nav nav-pills pull-right">
             <li role="presentation"><a href="#">About</a></li>
             <li id="navLogIn" role="presentation" data-toggle="modal" data-target="#logInModal"><a href="#" >Log In</a></li>
             <li id="navSignUp" role="presentation" data-toggle="modal" data-target="#signUpModal"><a href="#" >Sign Up</a></li>
+            <li id="navSignOut" class="hidden" role='presentation'><a href='#' >Sign out</a></li>
           </ul>
         </nav>
-        <h3 class="text-muted">Project name</h3>
+        <h3 class="text-muted">Pondr</h3>
       </div>
 
       <!-- Modal -->
@@ -51,18 +52,18 @@
             <div class="modal-header">
               <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span>
                 <span class="sr-only">Close</span></button>
-              <h4 class="modal-title" id="myModalLabel">Sign in here</h4>
+              <h4 class="modal-title" id="myModalLabel">Sign up here</h4>
             </div>
             <div class="modal-body">
               <form id="signUpModalForm" class="form-inline">
-                  <div class="input-group">
+                  <span class="input-group">
                     <label>Username</label>
                     <input id="signUpUsername" class="form-control"/>
                     <br>
                     <label>Password</label>
                     <input id="signUpPassword" class="form-control" type="password"/>
-                  </div>
-                  <div id="signUpError" class="bg-danger hidden error"> Username Already Taken</div>
+                  </span>
+                  <span id="signUpError" class="input-group bg-danger hidden"> Username Already Taken </span>
               </form>
             </div>
             <div class="modal-footer">
@@ -79,10 +80,10 @@
             <div class="modal-header">
               <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span>
                 <span class="sr-only">Close</span></button>
-              <h4 class="modal-title" id="myModalLabel">Sign in here</h4>
+              <h4 class="modal-title" id="myModalLabel">Login here</h4>
             </div>
             <div class="modal-body">
-              <form class="form-inline">
+              <form id="logInModalForm" class="form-inline">
                   <div class="input-group">
                     <label>Username</label>
                     <input id="logInUsername" class="form-control"/>
@@ -90,6 +91,7 @@
                     <label>Password</label>
                     <input id="logInPassword" class="form-control" type="password"/>
                   </div>
+                  <span id="logInError" class="input-group bg-danger hidden"> Invalid username or password! </span>
               </form>
             </div>
             <div class="modal-footer">
@@ -114,6 +116,31 @@
          
         </div>
 
+        <div class="modal fade" id="selectedRoomModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span>
+                  <span class="sr-only">Close</span></button>
+                <h4 class="modal-title" id="myModalLabel">Enter Password</h4>
+              </div>
+              <div class="modal-body">
+                <form id="selectedRoomModalForm" class="form-inline">
+                    <span class="input-group">
+                      <label>Password</label>
+                      <input id="selectedRoomPassword" class="form-control" type="password"/>
+                    </span>
+                    <span id="selectedRoomError" class="input-group bg-danger hidden"> Username Already Taken </span>
+                </form>
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                <button id="selectedRoomButton" type="button" class="btn btn-primary">Submit</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
         <div align="middle" class="col-xs-6"> 
             <h2> Create a Room</h2>
             <div>
@@ -122,6 +149,9 @@
                     <input id="roomInputName" class="form-control" placeholder="Add Room"/>
                     <div id="addRoomBtn" class="input-group-addon btn-success">+</div>
                   </div>
+                  <div>
+                    <input id="roomPassword" class="form-control" placeholder="Password" type="password">
+                  </div>
               </form>
               <div id="roomError" class="bg-danger hidden error">
                 Room already taken
@@ -129,10 +159,6 @@
             </div>
         </div>
       </div>
-
-
-
-
 
       <footer class="footer">
         <p>&copy; Company 2014</p>

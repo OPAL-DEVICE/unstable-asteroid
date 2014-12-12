@@ -23,7 +23,9 @@ var Room  = require('./roomModel'),
       password: roomObject.password, 
       createdBy: userObject.name,
       sessionId: ''
+
    };
+
     var createRoom = Q.nbind(Room.create, Room);
     var findRoom = Q.nbind(Room.find, Room);
     console.log(JSON.stringify(findRoom()));
@@ -61,6 +63,9 @@ var Room  = require('./roomModel'),
   //PUBLIC: User not prompted for password, so this will be expecting an empty string
   //PRIVATE: User prompted for password
   enterRoom: function(roomName, roomPassword, userObj, callback) {
+    console.log("ROOM NAME", roomName);
+    console.log("ROOM PASSWORD", roomPassword);
+    console.log("USER NAME", userObj.username)
     var findRoom = Q.nbind(Room.find, Room);
     findRoom({name: roomName})
       .then(function(foundRoom){
@@ -75,13 +80,14 @@ var Room  = require('./roomModel'),
           }
         }
         else {
+          //room name not found
           callback(false);
         }
       })
       .fail(function(err, data) {
-        console.error('Inappropriate input');
+        console.error('Inappropriate input', err);
       });
-  },
+  }, 
 
   /**
   * Removes user from room
@@ -147,6 +153,5 @@ var Room  = require('./roomModel'),
       .fail(function(){
         callback(false);
       });
-  }//,
-
+  }
  };
