@@ -8,7 +8,7 @@
     <meta name="author" content="">
     <link rel="icon" href="../../favicon.ico">
 
-    <title>Pondr - A Powerful Group Brainstorming and Communication Tool</title>
+    <title>Storm - A Powerful Group Brainstorming and Communication Tool</title>
 
     <!-- Bootstrap core CSS -->
     <link href="bower_components/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -36,13 +36,13 @@
       <div class="header">
         <nav>
           <ul class="nav nav-pills pull-right">
-            <li role="presentation"><a href="/about.html">About</a></li>
+            <li id="navAbout" role="presentation"><a href="/about.html">About</a></li>
             <li id="navLogIn" role="presentation" data-toggle="modal" data-target="#logInModal"><a href="#" >Log In</a></li>
             <li id="navSignUp" role="presentation" data-toggle="modal" data-target="#signUpModal"><a href="#" >Sign Up</a></li>
             <li id="navSignOut" class="hidden" role='presentation'><a href='#' >Sign out</a></li>
           </ul>
         </nav>
-        <h3 class="text-muted">Pondr</h3>
+        <h3 class="text-muted">Storm</h3>
       </div>
 
       <!-- Modal -->
@@ -103,12 +103,13 @@
       </div>
 
       <div class="jumbotron">
-        <h1>PONDR</h1>
-        <p class="lead">Group Brainstorming and Communication Tool</p>
+        <h1>Storm</h1>
+        <p class="lead">A Group Brainstorming and Communication Tool</p>
       </div>
 
-      <div class="row marketing">
+      <div class="row marketing hidden">
         <div class="col-xs-6">
+          <h2 align="middle">Pick a Room!</h2>
           <ul class="RoomList">
           </ul>
          
@@ -139,7 +140,7 @@
           </div>
         </div>
 
-        <div align="middle" class="col-xs-6"> 
+        <div id="createRoom" align="middle" class="col-xs-6 hidden"> 
             <h2> Create a Room</h2>
             <div>
               <form id="roomForm" class="form-inline">

@@ -73,7 +73,7 @@ mongoose.connect('mongodb://MongoLab-d:tsWFfWiQkrxfZhKZbNOBPVGp3culnVTNs5G7nyd1c
     .fail(function() {
       console.error('Inappropriate input');
     });
-  } //,
+  }
 
   
 

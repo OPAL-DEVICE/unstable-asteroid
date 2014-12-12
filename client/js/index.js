@@ -22,7 +22,7 @@ $(document).ready(function(){
   socket.onCreatedUser(function(roomsObject) {
     if (roomsObject) {
       $('#navSignUp, #navLogIn').addClass('hidden');
-      $('#navSignOut').removeClass('hidden');
+      $('#navSignOut, #createRoom, .marketing').removeClass('hidden');
       $('#signUpModal').modal('toggle');
       for (var i = 0; i < roomsObject.length; i++) {
         $('.RoomList').append("<li class='room' data-toggle='modal' data-target='#selectedRoomModal'>"+ roomsObject[i].name +"</li>");
@@ -48,7 +48,7 @@ $(document).ready(function(){
   socket.onLoggedIn(function(roomsObject){
     if(roomsObject) {
       $('#navSignUp, #navLogIn').addClass('hidden'); 
-      $('#navSignOut').removeClass('hidden'); 
+      $('#navSignOut, #createRoom, .marketing').removeClass('hidden'); 
       $('#logInModal').modal('toggle');
       for (var i = 0; i < roomsObject.length; i++) {
         $('.RoomList').append("<li class='room' data-toggle='modal' data-target='#selectedRoomModal'>"+ roomsObject[i].name +"</li>");
@@ -127,7 +127,7 @@ $(document).ready(function(){
 ////////////// SIGN OUT //////////////
   $(document).on('click', '#navSignOut', function() {
     $('#navSignUp, #navLogIn').removeClass('hidden');
-    $('#navSignOut').addClass('hidden');
+    $('#navSignOut, #createRoom, .marketing').addClass('hidden');
     $('.room').remove();
   });
 //////////////////////////////////////////

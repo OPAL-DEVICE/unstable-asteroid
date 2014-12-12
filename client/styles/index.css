@@ -2,6 +2,7 @@
 body {
   padding-top: 20px;
   padding-bottom: 20px;
+  background-color: #315B7E;
 }
 
 /* Everything but the jumbotron gets side spacing for mobile first views */
@@ -14,7 +15,7 @@ body {
 
 /* Custom page header */
 .header {
-  border-bottom: 1px solid #e5e5e5;
+  border-bottom: 1px solid #FBB03B;
 }
 /* Make the masthead heading the same height as the navigation */
 .header h3 {
@@ -24,11 +25,15 @@ body {
   line-height: 40px;
 }
 
+.text-muted {
+  color: #FBB03B;
+}
+
 /* Custom page footer */
 .footer {
   padding-top: 19px;
   color: #777;
-  border-top: 1px solid #e5e5e5;
+  border-top: 1px solid #FBB03B;
 }
 
 /* Customize container */
@@ -37,6 +42,7 @@ body {
     max-width: 730px;
   }
 }
+
 .container-narrow > hr {
   margin: 30px 0;
 }
@@ -44,11 +50,17 @@ body {
 /* Main marketing message and sign up button */
 .jumbotron {
   text-align: center;
-  border-bottom: 1px solid #e5e5e5;
+  border: 3px solid #FBB03B;
+  background-image: url("../stormLarge.png");
+  background-color: #FBB03B;
+  background-repeat: no-repeat;
+  background-size: 240px 240px;
+  background-position: center;
 }
+
 .jumbotron .btn {
   padding: 14px 24px;
-  font-size: 21px;
+  font-size: 28px;
 }
 
 /* Supporting marketing content */
@@ -111,5 +123,29 @@ body {
   width: 67%;
 }
 
+.jumbotron h1 {
+  color: white;
+/*  -webkit-text-stroke-width: 2px;
+  -webkit-text-stroke-color: #315B7E;*/
+}
+.lead {
+  color: #315B7E;
+  font-weight: bold;
+}
 
+.nav a, h2 {
+  color: #FBB03B;
+}
+
+.nav a:hover {
+  color: black;
+}
+
+.RoomList {
+  background-color: #FCC672;
+  border: solid 5px #FBB03B;
+  border-radius: 3px;
+  list-style-type: none;
+  font-weight: bold;
+}
 

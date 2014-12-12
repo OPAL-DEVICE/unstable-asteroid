@@ -3,20 +3,20 @@
  * Code licensed under the Apache License v2.0.
  * For details, see http://www.apache.org/licenses/LICENSE-2.0.
  */
-.about a{
+a{
   text-align: center;
   color: #fff; 
-  background: #013560;
+  background: #315B7E;
   color: #FBB03B;
 }
-.about a:hover{
+a:hover{
      color: #FBB03B;
 }
 
 body {
     overflow: hidden;
     font-size: 1.5em;
-    background: #013560;
+    background: #315B7E;
 }
 
 p {
@@ -33,7 +33,7 @@ a:focus,
 a:active,
 a.active {
     outline: 0;
-    color: #013560;
+    color: #315B7E;
 }
 
 h1,
@@ -77,7 +77,7 @@ hr.star-light {
 hr.star-light:after {
     /*color: #fff;*/
     color: #FBB03B;
-    background-color: #013560;
+    background-color: #315B7E;
 }
 
 hr.star-primary {
@@ -96,7 +96,7 @@ hr.star-primary:after {
 header {
     text-align: center;
     color: #fff;
-    background: #013560;
+    background: #315B7E;
 }
 
 header .container {
@@ -153,7 +153,14 @@ div .circular {
     -moz-border-radius: 50%;
     width: 150px;
     height: 150px;
+    margin-top: 20px;
+    margin-bottom: 20px;
     /*padding-right: 20px;*/
 }
+
+/*.faceRow {
+    margin-top: 10px;
+    margin-bottom: 10px;
+}*/
 
 
