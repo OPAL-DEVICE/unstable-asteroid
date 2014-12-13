@@ -5,22 +5,6 @@
   	<link rel="stylesheet" type="text/css" href="styles/styles.css">
     <link rel="icon" type="image/png" href="stormSmall.png" />
   <script src='http://static.opentok.com/webrtc/v2.2/js/opentok.min.js'></script>  
-
-  </head>
-  <body>
-    <div class='area d3box'></div>
-    <div class='controls'>
-      <div class='bar'>
-        <!-- <div class="toggle"></div> -->
-        <form class='inputbox'>
-          <input type="text" class="messageBox" maxlength="20" placeholder=' Your Idea' required>
-          <input class='btn edit' type='edit' value='Edit Idea'/>
-          <input class='btn send' type="submit" value="Add Idea" />
-        </form>
-        <div id="subscribers">videos will enter here</div>
-        <button class='startVidSession' type="submit" onclick='startVidSession()'>start video</button>
-        <button class='btn remove' hidden='hidden'>Remove</button>
-
     <script>
     var startVidSession = function(sessionId, token) {
       console.log(sessionId, token);
@@ -91,7 +75,28 @@
     };
 
     </script>
+  </head>
+  <body>
+    <div class='area d3box'>
+      <button class="btn slideout-menu-toggle" value="Menu"> Menu </button>
+    </div>
+
+    <div class='controls'>
+        <!-- <div class="toggle"></div> -->
+        <div class="slideout-menu">
+        <div class="bar">
+        <form class='inputbox'>
+          <input type="text" class="messageBox" maxlength="20" placeholder=' Your Idea' required>
+          <button class='btn edit' type='edit' value='Edit Idea'> Edit Idea</button>
+          <button class='btn send' type="submit" value="Add Idea" > Add Idea</button>
+        </form>
+        <div id="subscribers">videos will enter here</div>
+        <button class='startVidSession' type="submit" onclick='startVidSession()'>start video</button>
+        <button class='btn remove' hidden='hidden'>Remove</button>
+
       </div>
+      </div> 
+      </div> 
     </div>
   </body>
   <script src='http://static.opentok.com/webrtc/v2.2/js/opentok.min.js'></script>  
