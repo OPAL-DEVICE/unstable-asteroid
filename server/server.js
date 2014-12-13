@@ -1,12 +1,22 @@
 //get the dependencies
 var express = require('express');
 var app = express();
+OpenTok = require('opentok');
 var http = require('http').Server(app);
 var io = require('socket.io')(http);
 var messageController = require('./messages/messageController');
 var userController = require('./users/userController');
 var roomController = require('./rooms/roomController');
 var clearURL = '/storm.html/clear';
+
+
+// //start app
+// function init() {
+//   app.listen(3000, function() {
+//     console.log('app running on ' + 3000);
+//   });
+// };
+
 
 //serve static files
 app.use(express.static(__dirname + '/../client') );
@@ -15,6 +25,7 @@ app.use('/docs', express.static(__dirname + '/../docs')  );
 
 //redirect blank url to index.html
 app.get('/', function(req, res) {
+  // res.render('storm');
   res.render('index');
 });
 
@@ -90,8 +101,10 @@ io.on('connection', function(socket) {
   });
   //Enter room
   socket.on('enter room', function(roomName, roomPass, userObj){
+    console.log('IN ENTER ROOM');
     roomController.enterRoom(roomName, roomPass, userObj, function(isAuthentic, roomObj){
       if(isAuthentic) {
+        sendFullMessageTree(roomObj);
         
 
         //HACKY BULLSHIT
@@ -103,6 +116,81 @@ io.on('connection', function(socket) {
         //redirect to storm.html aka app.js
         socket.emit('entered room', roomObj);
         // sendFullMessageTree(roomObj._id);
+
+        //if entered room. start an opentok session so user can connect via video/audio
+        var apiKey = "45105222";
+        var apiSecret = "dcc51506615e5c2f67b77ae57c1eba1860e387b7";
+        // Initialize OpenTok and store it in the express app
+        var opentok = new OpenTok(apiKey, apiSecret);
+        // Create a session and store it in the express app -- use when making new lobby
+        roomController.getSessionId(roomName, function(returnedVal) {
+          //if exists
+          var sessionId;
+          var token;
+          if (returnedVal !== '') { 
+            sessionId = returnedVal;
+          } else {
+            //create a sessionId
+            opentok.createSession({}, function(error, session) {
+              if (error) {
+                console.log("error creating a session: " + error);
+              } else {
+                sessionId = session.sessionId;
+                roomController.addSession(roomName, sessionId, function(isSaved) {
+
+                  if (isSaved) {
+                    console.log('saved');
+                  }
+                });
+                console.log("Session ID: " + sessionId);
+              }
+
+              var tokenOptions = {};
+                  tokenOptions.role = "publisher";
+
+              token = opentok.generateToken(sessionId, tokenOptions);
+              console.log(token);
+
+              app.listen(3000, function() {
+                  console.log('app running on ' + 3000);
+                });
+              //sends signal back to client
+// <<<<<<< HEAD
+//               socket.emit("entered room", sessionId, token);
+// =======
+//               // socket.emit("entered room", sessionId, token);
+// >>>>>>> tempStuff
+
+            });
+          }
+        });
+
+        // }) 
+        // opentok.createSession(function(err, session) {
+        //   if (err) throw err;
+        //   app.set('sessionId', session.sessionId);
+        //   console.log(session.sessionId);
+        //   // starts the app
+
+        //   var sessionId = session.sessionId;
+        //   console.log("Session ID: " + sessionId);
+        //   var tokenOptions = {};
+        //   tokenOptions.role = "publisher";
+        //   tokenOptions.data = "username=" + userObj.name;
+       
+        //   // Generate a token.
+        //   var token = opentok.generateToken(sessionId, tokenOptions);
+        //   console.log(token);
+
+        //   // init();
+        //   //necessary????
+        //   http.listen(port, function() {
+        //     console.log("Listening to port 8000");
+        //   });
+        //   socket.emit("entered room", sessionId, token);
+        // });
+        // //socket.emit('entered room', roomObj);
+
       }
       else {
         socket.emit('wrong room password', true);
@@ -144,6 +232,7 @@ io.on('connection', function(socket) {
           console.log("USER LOGGED IN");
           socket.emit('logged in', rooms);
         });
+
       }
       else {
         socket.emit('wrong user password', true);
