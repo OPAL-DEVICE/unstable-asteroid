@@ -145,7 +145,7 @@ $(document).ready(function(){
   socket.onEnteredRoom(function(roomObj){
     //hard-coded href
     socket.redirectToRoom(roomObj);
-    window.location.href="http://localhost:8000/storm.html";
+    window.location.href="http://10.8.30.226:8000/storm.html";
   });
 
 
