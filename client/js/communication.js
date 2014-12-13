@@ -28,9 +28,9 @@ Socket.prototype.createRoom = function(roomName, roomPassword, userName){
 }
 
 //sends user information to server. 
-Socket.prototype.userSignUp = function(username, password){
+Socket.prototype.userSignUp = function(username, passWord){
   console.log("INSIDE CLIENT USER SIGNUP");
-  this.connection.emit('user sign up', {name: username, password: password}); 
+  this.connection.emit('user sign up', {name: username, password: passWord}); 
 }
 
 Socket.prototype.userLogIn = function(username, password){
@@ -114,3 +114,4 @@ Socket.prototype.onRedirectToRoom = function(callback) {
     callback(roomObj);
   });
 }
+

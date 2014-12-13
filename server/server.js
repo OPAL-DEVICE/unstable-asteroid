@@ -137,7 +137,7 @@ io.on('connection', function(socket) {
     });
   });
   //Login
-  socket.on('user login', function(userObj, userPass){
+  socket.on('user login', function(userObj){
     userController.login(userObj, function(isAuthentic){
       if(isAuthentic) {
         roomController.getAllRooms(function(rooms){
