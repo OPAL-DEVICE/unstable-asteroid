@@ -14,17 +14,8 @@ body {
 
 .bar {
 	text-align: center;
-	background-color: #989898;
-	position: fixed; 
-	top: 0px;
-	right: 0px;
 	width: 250px;
 	padding: 0px 5px 5px;
-	-moz-box-shadow: -4px 4px 8px #888; /* FF 3.5+ */
-	-webkit-box-shadow: -4px 4px 8px #888; /* Safari 3.0+, Chrome */
-	box-shadow: -4px 4px 8px #888; /* Opera 10.5, IE 9.0 */
-	filter: progid:DXImageTransform.Microsoft.Shadow(Strength=5, Direction=215, Color='#888888'); /* IE 6, IE 7 */
-	-ms-filter: "progid:DXImageTransform.Microsoft.Shadow(Strength=5, Direction=215, Color='#888888')"; /* IE 8 */
 }
 .bar .btn {
   width: 44%;
@@ -104,5 +95,70 @@ html, body, .d3box {
     -webkit-animation-duration:         10s; 
     -webkit-animation-iteration-count:  infinite;
     -webkit-animation-timing-function: linear;
+}
+
+.slideout-menu {
+  position: fixed;
+  top: 0;
+  right: -250px;
+  width: 250px;
+  height: 100%;
+  background: #333;
+  z-index: 100;
+  -moz-box-shadow: -4px 4px 8px #888; /* FF 3.5+ */
+  -webkit-box-shadow: -4px 4px 8px #888; /* Safari 3.0+, Chrome */
+  box-shadow: -4px 4px 8px #888; /* Opera 10.5, IE 9.0 */
+}
+.slideout-menu h3 {
+  position: relative;
+  padding: 12px 10px;
+  color: #fff;
+  font-size: 1.2em;
+  font-weight: 400;
+  border-bottom: 4px solid #222;
+}
+.slideout-menu .slideout-menu-toggle {
+  position: absolute;
+  top: 12px;
+  right: 10px;
+  display: inline-block;
+  padding: 6px 9px 5px;
+  font-family: Arial, sans-serif;
+  font-weight: bold;
+  line-height: 1;
+  background: #222;
+  color: #999;
+  text-decoration: none;
+  vertical-align: top;
+}
+.slideout-menu .slideout-menu-toggle:hover {
+  color: #fff;
+}
+.slideout-menu ul {
+  list-style: none;
+  font-weight: 300;
+  border-top: 1px solid #151515;
+  border-bottom: 1px solid #454545;
+}
+.slideout-menu ul li {
+  border-top: 1px solid #454545;
+  border-bottom: 1px solid #151515;
+}
+.slideout-menu ul li a {
+  position: relative;
+  display: block;
+  padding: 10px;
+  color: #999;
+  text-decoration: none;
+}
+.slideout-menu ul li a:hover {
+  background: #000;
+  color: #fff;
+}
+.slideout-menu ul li a i {
+  position: absolute;
+  top: 15px;
+  right: 10px;
+  opacity: .5;
 }
 
