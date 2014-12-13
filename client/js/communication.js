@@ -90,9 +90,27 @@ Socket.prototype.onCreatedRoom = function(callback) {
   });
 }
 
+Socket.prototype.onEnteredRoom = function(callback){
+  this.connection.on('entered room', function(roomObj){
+    console.log("ON ENTERED ROOM IN COMMUNICATION.JS")
+    callback(roomObj);
+  });
+}
+
 Socket.prototype.onLoggedIn = function(callback) {
   this.connection.on('logged in', function(truthy){
     callback(truthy);
   });
 }
 
+Socket.prototype.redirectToRoom = function(roomObj){
+  console.log("IN redirectToRoom");
+  this.connection.emit("redirect to storm", true);
+}
+
+Socket.prototype.onRedirectToRoom = function(callback) {
+  this.connection.on("redirected to storm", function(roomObj){
+    console.log("IN onRedirectToRoom");
+    callback(roomObj);
+  });
+}

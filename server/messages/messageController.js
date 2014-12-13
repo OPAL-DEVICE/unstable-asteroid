@@ -16,10 +16,10 @@ module.exports = {
    * return array of constructed trees
    * @params [Function] callback to be called after successful retrieval
    */
-  getFullMessageTree: function(roomObject, callback) {
+  getFullMessageTree: function(roomID, callback) {
     var getMessageTree = Q.nbind(Message.find, Message);
 
-    getMessageTree({roomID: roomObject.roomID})
+    getMessageTree({roomID: roomID})
       .then(function (messages) {
         callback(module.exports.constructRootsArray(messages));
       })

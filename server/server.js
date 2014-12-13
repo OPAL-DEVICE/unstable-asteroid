@@ -23,10 +23,17 @@ app.get(clearURL, function(req, res) {
   messageController.clearDB(req, res);
 });
 
+/**
+  HACKY BULLSHIT
+*/
+var THEROOM;
+
+
+
 //open a socket between the client and server
 io.on('connection', function(socket) {
-  var sendFullMessageTree = function(roomObj) {
-    messageController.getFullMessageTree(roomObj, function(messages) {
+  var sendFullMessageTree = function(roomID) {
+    messageController.getFullMessageTree(roomID, function(messages) {
       io.emit('all messages', messages);
     });
   };
@@ -37,30 +44,30 @@ io.on('connection', function(socket) {
   // });
 
   //send all current messages to all users when a new message has been added
-  socket.on('new message', function(roomObj, msg) {
+  socket.on('new message', function(msg) {
     messageController.addNewMessage(msg, function() {
-      sendFullMessageTree(roomObj);
+      sendFullMessageTree(msg.roomID);
     });
   });
 
   //send all current messages to all users after a message has been edited
   socket.on('edit message',function(msg){
     messageController.editMessage(msg,function(){
-      sendFullMessageTree();
+      sendFullMessageTree(msg.roomID);
     });
   });
 
   //send all current messages to room after a message has had a file attached
   socket.on('add file', function(msg) {
     messageController.addFileToMessage(msg, function(){
-      sendFullMessageTree();
+      sendFullMessageTree(msg.roomID);
     });
   });
 
   //send all current messages to all users after a message has been removed
   socket.on('remove message leaf',function(msg){
     messageController.removeMessage(msg,function(){
-      sendFullMessageTree();
+      sendFullMessageTree(msg.roomID);
     });
   });
 
@@ -85,13 +92,27 @@ io.on('connection', function(socket) {
   socket.on('enter room', function(roomName, roomPass, userObj){
     roomController.enterRoom(roomName, roomPass, userObj, function(isAuthentic, roomObj){
       if(isAuthentic) {
+        
+
+        //HACKY BULLSHIT
+        THEROOM = roomObj;
+
+
+
+
+        //redirect to storm.html aka app.js
         socket.emit('entered room', roomObj);
-        sendFullMessageTree(roomObj);
+        // sendFullMessageTree(roomObj._id);
       }
       else {
         socket.emit('wrong room password', true);
       }
     });
+  });
+  socket.on('redirect to storm', function(){
+    socket.emit('redirected to storm', THEROOM);
+
+    sendFullMessageTree(THEROOM._id);
   });
   //Exit
   socket.on('exit room', function(roomObj, userName){
@@ -120,7 +141,7 @@ io.on('connection', function(socket) {
     userController.login(userObj, function(isAuthentic){
       if(isAuthentic) {
         roomController.getAllRooms(function(rooms){
-          console.log("USER LOGGED IN", rooms);
+          console.log("USER LOGGED IN");
           socket.emit('logged in', rooms);
         });
       }
