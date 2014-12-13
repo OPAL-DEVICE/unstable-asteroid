@@ -37,6 +37,45 @@ $(document).ready(function(){
   // console.log("ROOM: ");
   // console.log([room]);
   socket.onAllMessages(setTreeData);
+  socket.onEnteredRoom(startVidSession);
+
+  var startVidSession = function(sessionId, token) {
+    console.log(sessionId, token);
+    // Initialize API key, session, and token...
+    // Think of a session as a room, and a token as the key to get in to the room
+    // Sessions and tokens are generated on your server and passed down to the client
+    var apiKey = "45105222";
+    var sessionId = sessionId;
+    var token = token;
+
+    var session = OT.initSession(sessionId);
+    var publisher = OT.initPublisher(apiKey, 'publisher');
+
+    session.on({
+      // when session.connect() asynchronously completes
+      sessionConnected: function(event) {
+        console.log('hi');
+        // Publish the publisher: triggers 'streamCreated' on other clients
+        session.publish(publisher);
+      },
+
+      // runs when another client publishes a stream: when session.publish() is called
+      streamCreated: function(event) {
+        // Create a container for a new Subscriber, assign it an id using the streamId, put it inside
+        // the element with id="subscribers"
+        var subContainer = document.createElement('div');
+        subContainer.id = 'stream id: ' + event.stream.streamId;
+        console.log(subContainer.id);
+        document.getElementById('subscribers').appendChild(subContainer);
+
+        // Subscribe to the stream that caused this event, put it inside the container we just made
+        session.subscribe(event.stream, subContainer);
+      }
+    });
+    // Connect to the Session using the 'apiKey' of the application and a 'token' for permission
+    session.connect(apiKey, token);
+  };
+
 
   //Add bubble on submit
   $('.inputbox').on('submit', function(e){

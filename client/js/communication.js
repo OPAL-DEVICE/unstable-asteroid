@@ -97,6 +97,14 @@ Socket.prototype.onEnteredRoom = function(callback){
   });
 }
 
+//Sets callback for when 'all messages' event is recieved
+Socket.prototype.onAllMessages = function(callback){
+  this.connection.on('all messages', function(messageReceived){
+    callback(messageReceived);
+  });
+};
+
+
 Socket.prototype.onLoggedIn = function(callback) {
   this.connection.on('logged in', function(truthy){
     callback(truthy);
