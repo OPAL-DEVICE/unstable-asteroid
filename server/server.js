@@ -117,53 +117,53 @@ io.on('connection', function(socket) {
         socket.emit('entered room', roomObj);
         // sendFullMessageTree(roomObj._id);
 
-        //if entered room. start an opentok session so user can connect via video/audio
-        var apiKey = "45105222";
-        var apiSecret = "dcc51506615e5c2f67b77ae57c1eba1860e387b7";
-        // Initialize OpenTok and store it in the express app
-        var opentok = new OpenTok(apiKey, apiSecret);
-        // Create a session and store it in the express app -- use when making new lobby
-        roomController.getSessionId(roomName, function(returnedVal) {
-          //if exists
-          var sessionId;
-          var token;
-          if (returnedVal !== '') { 
-            sessionId = returnedVal;
-          } else {
-            //create a sessionId
-            opentok.createSession({}, function(error, session) {
-              if (error) {
-                console.log("error creating a session: " + error);
-              } else {
-                sessionId = session.sessionId;
-                roomController.addSession(roomName, sessionId, function(isSaved) {
+//         //if entered room. start an opentok session so user can connect via video/audio
+//         var apiKey = "45105222";
+//         var apiSecret = "dcc51506615e5c2f67b77ae57c1eba1860e387b7";
+//         // Initialize OpenTok and store it in the express app
+//         var opentok = new OpenTok(apiKey, apiSecret);
+//         // Create a session and store it in the express app -- use when making new lobby
+//         roomController.getSessionId(roomName, function(returnedVal) {
+//           //if exists
+//           var sessionId;
+//           var token;
+//           if (returnedVal !== '') { 
+//             sessionId = returnedVal;
+//           } else {
+//             //create a sessionId
+//             opentok.createSession({}, function(error, session) {
+//               if (error) {
+//                 console.log("error creating a session: " + error);
+//               } else {
+//                 sessionId = session.sessionId;
+//                 roomController.addSession(roomName, sessionId, function(isSaved) {
 
-                  if (isSaved) {
-                    console.log('saved');
-                  }
-                });
-                console.log("Session ID: " + sessionId);
-              }
+//                   if (isSaved) {
+//                     console.log('saved');
+//                   }
+//                 });
+//                 console.log("Session ID: " + sessionId);
+//               }
 
-              var tokenOptions = {};
-                  tokenOptions.role = "publisher";
+//               var tokenOptions = {};
+//                   tokenOptions.role = "publisher";
 
-              token = opentok.generateToken(sessionId, tokenOptions);
-              console.log(token);
+//               token = opentok.generateToken(sessionId, tokenOptions);
+//               console.log(token);
 
-              app.listen(3000, function() {
-                  console.log('app running on ' + 3000);
-                });
-              //sends signal back to client
-// <<<<<<< HEAD
-//               socket.emit("entered room", sessionId, token);
-// =======
-//               // socket.emit("entered room", sessionId, token);
-// >>>>>>> tempStuff
+//               app.listen(3000, function() {
+//                   console.log('app running on ' + 3000);
+//                 });
+//               //sends signal back to client
+// // <<<<<<< HEAD
+// //               socket.emit("entered room", sessionId, token);
+// // =======
+// //               // socket.emit("entered room", sessionId, token);
+// // >>>>>>> tempStuff
 
-            });
-          }
-        });
+//             });
+//           }
+//         });
 
         // }) 
         // opentok.createSession(function(err, session) {
