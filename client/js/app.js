@@ -1,6 +1,6 @@
 
 treeData = [];
-
+var room = null;
 var setTreeData = function(data){
   //If data is present set equal to treedata 
   // then update page
@@ -8,13 +8,19 @@ var setTreeData = function(data){
   update();
 };
 
+var setRoom = function(roomObj){
+  console.log("IN SET ROOM");
+  console.log(roomObj);
+  room = roomObj;
+};
+
 var allowRemoval = function(data){
   $('.btn.remove').show();
-}
+};
 
 var disallowRemoval = function(data){
   $('.btn.remove').hide();
-}
+};
 
 $(document).ready(function(){
 
@@ -24,7 +30,12 @@ $(document).ready(function(){
   //Make connection 
   var socket = new Socket();
 
+  socket.redirectToRoom();
+
   //Set listener
+  socket.onRedirectToRoom(setRoom);
+  // console.log("ROOM: ");
+  // console.log([room]);
   socket.onAllMessages(setTreeData);
 
   //Add bubble on submit
@@ -33,12 +44,17 @@ $(document).ready(function(){
     var message = $('.messageBox').val();
     $('.messageBox').val('');
     var messageObject = {};
+    var parent;
     if(nodeSelected){
-      //Send over message and parentID
-      messageObject = {message: message, parentID: nodeSelected._id};
+      parent = nodeSelected._id;
     }else{
-      messageObject = {message: message, parentID: 'null'};
+      parent = null;
     }
+    messageObject = {
+      message: message,
+      parentID: parent,
+      roomID: room._id
+    };
     socket.sendMessage(messageObject);
   });
 
@@ -49,7 +65,11 @@ $(document).ready(function(){
     var messageObject = {};
     if(nodeSelected){
       //Send over message and parentID
-      messageObject = {message: message, _id: nodeSelected._id};
+      messageObject = {
+        message: message,
+        _id: nodeSelected._id,
+        roomID: room._id
+      };
       socket.sendEdit(messageObject);
     }
   });

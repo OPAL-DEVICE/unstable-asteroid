@@ -63,14 +63,11 @@ var Room  = require('./roomModel'),
   //PUBLIC: User not prompted for password, so this will be expecting an empty string
   //PRIVATE: User prompted for password
   enterRoom: function(roomName, roomPassword, userObj, callback) {
-    console.log("ROOM NAME", roomName);
-    console.log("ROOM PASSWORD", roomPassword);
-    console.log("USER NAME", userObj.username)
     var findRoom = Q.nbind(Room.find, Room);
     findRoom({name: roomName})
       .then(function(foundRoom){
         if(foundRoom.length !== 0) {
-          if(foundRoom[0].password === roomPassword){
+          if(foundRoom[0].password === roomPassword || foundRoom[0].password.length === 0){
             foundRoom[0].users.push(userObj.username);
             callback(true, foundRoom[0]);
           }

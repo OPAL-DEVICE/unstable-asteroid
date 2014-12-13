@@ -116,5 +116,10 @@ $(document).ready(function(){
     $('#signUpError').addClass('hidden');
   });
 
+  socket.onEnteredRoom(function(roomObj){
+    //hard-coded href
+    socket.redirectToRoom(roomObj);
+    window.location.href="http://localhost:8000/storm.html";
+  });
 }); 
 
