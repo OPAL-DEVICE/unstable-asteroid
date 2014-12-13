@@ -13,8 +13,9 @@ mongoose.connect('mongodb://MongoLab-d:tsWFfWiQkrxfZhKZbNOBPVGp3culnVTNs5G7nyd1c
 
  module.exports = {
   /**
-  * create and store user obj
-  * @params [Function] callback to be called after successful retrieval
+  * create and store user object
+  * @params [Object] user object to imitate user data to be stored
+            [Function] callback to be called after successful retrieval
   */
   addNewUser: function(userObject, callback) { 
    var newUser = {
@@ -22,9 +23,6 @@ mongoose.connect('mongodb://MongoLab-d:tsWFfWiQkrxfZhKZbNOBPVGp3culnVTNs5G7nyd1c
       password: userObject.password
    };
 
-   console.log(newUser);
-    
-  //creates promises of query functions
   var createUser = Q.nbind(User.create, User);
   var findUser = Q.nbind(User.find, User);
 
@@ -47,13 +45,20 @@ mongoose.connect('mongodb://MongoLab-d:tsWFfWiQkrxfZhKZbNOBPVGp3culnVTNs5G7nyd1c
       console.error('Inappropriate Input')
     });
   },
-
+  /**
+  * create and store user object
+  * @params [Object] user object to retrieve user's name
+            [Function] callback to be called after successful retrieval
+  */
   login: function(userObject, callback) {
     var findUser = Q.nbind(User.find, User);
     findUser({name: userObject.name})
     .then(function(foundUser){
+      console.log("LENGTH", foundUser.length);
       if(foundUser.length !== 0) {
         if(foundUser[0].password === userObject.password){
+          console.log("A: ", foundUser[0].password);
+          console.log("B: ", userObject.password);
           callback(true);
         }
         //wrong password
@@ -68,7 +73,7 @@ mongoose.connect('mongodb://MongoLab-d:tsWFfWiQkrxfZhKZbNOBPVGp3culnVTNs5G7nyd1c
     .fail(function() {
       console.error('Inappropriate input');
     });
-  } //,
+  }
 
   
 

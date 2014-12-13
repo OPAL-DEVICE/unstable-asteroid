@@ -34,10 +34,17 @@ app.get(clearURL, function(req, res) {
   messageController.clearDB(req, res);
 });
 
+/**
+  HACKY BULLSHIT
+*/
+var THEROOM;
+
+
+
 //open a socket between the client and server
 io.on('connection', function(socket) {
-  var sendFullMessageTree = function(roomObj) {
-    messageController.getFullMessageTree(roomObj, function(messages) {
+  var sendFullMessageTree = function(roomID) {
+    messageController.getFullMessageTree(roomID, function(messages) {
       io.emit('all messages', messages);
     });
   };
@@ -48,30 +55,30 @@ io.on('connection', function(socket) {
   // });
 
   //send all current messages to all users when a new message has been added
-  socket.on('new message', function(roomObj, msg) {
+  socket.on('new message', function(msg) {
     messageController.addNewMessage(msg, function() {
-      sendFullMessageTree(roomObj);
+      sendFullMessageTree(msg.roomID);
     });
   });
 
   //send all current messages to all users after a message has been edited
   socket.on('edit message',function(msg){
     messageController.editMessage(msg,function(){
-      sendFullMessageTree();
+      sendFullMessageTree(msg.roomID);
     });
   });
 
   //send all current messages to room after a message has had a file attached
   socket.on('add file', function(msg) {
     messageController.addFileToMessage(msg, function(){
-      sendFullMessageTree();
+      sendFullMessageTree(msg.roomID);
     });
   });
 
   //send all current messages to all users after a message has been removed
   socket.on('remove message leaf',function(msg){
     messageController.removeMessage(msg,function(){
-      sendFullMessageTree();
+      sendFullMessageTree(msg.roomID);
     });
   });
 
@@ -98,6 +105,17 @@ io.on('connection', function(socket) {
     roomController.enterRoom(roomName, roomPass, userObj, function(isAuthentic, roomObj){
       if(isAuthentic) {
         sendFullMessageTree(roomObj);
+        
+
+        //HACKY BULLSHIT
+        THEROOM = roomObj;
+
+
+
+
+        //redirect to storm.html aka app.js
+        socket.emit('entered room', roomObj);
+        // sendFullMessageTree(roomObj._id);
 
         //if entered room. start an opentok session so user can connect via video/audio
         var apiKey = "45105222";
@@ -119,6 +137,7 @@ io.on('connection', function(socket) {
               } else {
                 sessionId = session.sessionId;
                 roomController.addSession(roomName, sessionId, function(isSaved) {
+
                   if (isSaved) {
                     console.log('saved');
                   }
@@ -128,7 +147,7 @@ io.on('connection', function(socket) {
 
               var tokenOptions = {};
                   tokenOptions.role = "publisher";
-              // Generate a token for client 
+
               token = opentok.generateToken(sessionId, tokenOptions);
               console.log(token);
 
@@ -136,7 +155,11 @@ io.on('connection', function(socket) {
                   console.log('app running on ' + 3000);
                 });
               //sends signal back to client
-              socket.emit("entered room", sessionId, token);
+// <<<<<<< HEAD
+//               socket.emit("entered room", sessionId, token);
+// =======
+//               // socket.emit("entered room", sessionId, token);
+// >>>>>>> tempStuff
 
             });
           }
@@ -174,6 +197,11 @@ io.on('connection', function(socket) {
       }
     });
   });
+  socket.on('redirect to storm', function(){
+    socket.emit('redirected to storm', THEROOM);
+
+    sendFullMessageTree(THEROOM._id);
+  });
   //Exit
   socket.on('exit room', function(roomObj, userName){
     roomController.exitRoom(roomObj, userName, function(room){
@@ -197,11 +225,11 @@ io.on('connection', function(socket) {
     });
   });
   //Login
-  socket.on('user login', function(userObj, userPass){
+  socket.on('user login', function(userObj){
     userController.login(userObj, function(isAuthentic){
       if(isAuthentic) {
         roomController.getAllRooms(function(rooms){
-          console.log("USER LOGGED IN", rooms);
+          console.log("USER LOGGED IN");
           socket.emit('logged in', rooms);
         });
 

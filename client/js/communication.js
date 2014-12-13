@@ -28,9 +28,9 @@ Socket.prototype.createRoom = function(roomName, roomPassword, userName){
 }
 
 //sends user information to server. 
-Socket.prototype.userSignUp = function(username, password){
+Socket.prototype.userSignUp = function(username, passWord){
   console.log("INSIDE CLIENT USER SIGNUP");
-  this.connection.emit('user sign up', {name: username, password: password}); 
+  this.connection.emit('user sign up', {name: username, password: passWord}); 
 }
 
 Socket.prototype.userLogIn = function(username, password){
@@ -90,10 +90,16 @@ Socket.prototype.onCreatedRoom = function(callback) {
   });
 }
 
-//from server. actual method calls on app.js
-Socket.prototype.onEnteredRoom = function(callback) {
-  this.connection.on('entered room', function(sessionId, token) {
-    callback(sessionId, token);
+// <<<<<<< HEAD
+// //from server. actual method calls on app.js
+// Socket.prototype.onEnteredRoom = function(callback) {
+//   this.connection.on('entered room', function(sessionId, token) {
+//     callback(sessionId, token);
+// =======
+Socket.prototype.onEnteredRoom = function(callback){
+  this.connection.on('entered room', function(roomObj){
+    console.log("ON ENTERED ROOM IN COMMUNICATION.JS")
+    callback(roomObj);
   });
 }
 
@@ -108,6 +114,18 @@ Socket.prototype.onAllMessages = function(callback){
 Socket.prototype.onLoggedIn = function(callback) {
   this.connection.on('logged in', function(truthy){
     callback(truthy);
+  });
+}
+
+Socket.prototype.redirectToRoom = function(roomObj){
+  console.log("IN redirectToRoom");
+  this.connection.emit("redirect to storm", true);
+}
+
+Socket.prototype.onRedirectToRoom = function(callback) {
+  this.connection.on("redirected to storm", function(roomObj){
+    console.log("IN onRedirectToRoom");
+    callback(roomObj);
   });
 }
 

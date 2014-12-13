@@ -7,7 +7,6 @@ var mongoose = require('mongoose');
 var RoomSchema = new mongoose.Schema({
   name: String,
   users: { type : Array , "default" : [] },
-  messages: { type : Array , "default" : [] },
   password: String,
   createdBy: String,
   sessionId: String
