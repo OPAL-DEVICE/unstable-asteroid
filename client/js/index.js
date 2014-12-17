@@ -145,9 +145,11 @@ $(document).ready(function(){
   socket.onEnteredRoom(function(roomObj){
     //hard-coded href
     socket.redirectToRoom(roomObj);
-    window.location.href="http://10.8.30.226:8000/storm.html";
+    window.location.pathname = "/storm.html";
   });
-
+  socket.onExitedRoom(function(roomObj){
+    console.log('Left', roomObj.roomname);
+  });
 
 }); 
 //////////////////////////////////////////

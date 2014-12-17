@@ -76,7 +76,6 @@ $(document).ready(function(){
   //   session.connect(apiKey, token);
   // };
   var startVidSession = function(sessionId, token) {
-    console.log(sessionId, token);
     // Initialize API key, session, and token...
     // Think of a session as a room, and a token as the key to get in to the room
     // Sessions and tokens are generated on your server and passed down to the client
@@ -111,8 +110,6 @@ $(document).ready(function(){
     // Connect to the Session using the 'apiKey' of the application and a 'token' for permission
     session.connect(apiKey, token);
   };
-
-
   //Add bubble on submit
   $('.inputbox').on('submit', function(e){
     e.preventDefault();
@@ -149,8 +146,6 @@ $(document).ready(function(){
     }
   });
 
-  
-
   $('.btn.remove').on('click',function(e){
     //Emit message to db
     var messageObject = {};
@@ -160,25 +155,31 @@ $(document).ready(function(){
     $(this).hide();
   });
 
-     $('.slideout-menu-toggle').on('click', function(event){
-      event.preventDefault();
-      // create menu variables
-      var slideoutMenu = $('.slideout-menu');
-      var slideoutMenuWidth = $('.slideout-menu').width();
-      
-      // toggle open class
-      slideoutMenu.toggleClass("open");
-      
-      // slide menu
-      if (slideoutMenu.hasClass("open")) {
-        slideoutMenu.animate({
-          right: "0px"
-        }); 
-      } else {
-        slideoutMenu.animate({
-          right: -slideoutMenuWidth
-        }, 250);  
-      }
-    });
+  $('.btn.exit').on('click', function(e){
+    socket.exitRoom();
+    window.location.pathname = '/';
+  });
+
+
+  $('.slideout-menu-toggle').on('click', function(event){
+    event.preventDefault();
+    // create menu variables
+    var slideoutMenu = $('.slideout-menu');
+    var slideoutMenuWidth = $('.slideout-menu').width();
+    
+    // toggle open class
+    slideoutMenu.toggleClass("open");
+    
+    // slide menu
+    if (slideoutMenu.hasClass("open")) {
+      slideoutMenu.animate({
+        right: "0px"
+      }); 
+    } else {
+      slideoutMenu.animate({
+        right: -slideoutMenuWidth
+      }, 250);  
+    }
+  });
 
 });
