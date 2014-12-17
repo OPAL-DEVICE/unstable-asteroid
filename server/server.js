@@ -34,11 +34,8 @@ app.get(clearURL, function(req, res) {
   messageController.clearDB(req, res);
 });
 
-/**
-  HACKY BULLSHIT
-*/
+//ROOM STORAGE
 var THEROOM;
-
 
 
 //open a socket between the client and server
@@ -204,9 +201,10 @@ io.on('connection', function(socket) {
   });
   //Exit
   socket.on('exit room', function(roomObj, userName){
-    roomController.exitRoom(roomObj, userName, function(room){
+    roomController.exitRoom(THEROOM, userName, function(room){
       socket.emit('exited room', room);
     });
+    THEROOM = null;
   }); 
 
   /* User socket stuff */

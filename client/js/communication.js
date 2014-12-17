@@ -129,3 +129,11 @@ Socket.prototype.onRedirectToRoom = function(callback) {
   });
 }
 
+Socket.prototype.exitRoom = function(){
+  this.connection.emit("exit room");
+}
+Socket.prototype.onExitedRoom = function(){
+  this.connection.on("exited room", function(){
+    callback(roomObj);
+  });
+}
